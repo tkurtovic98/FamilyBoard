@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "225090068697",
+    "firebase_url": "https://family-board-ff352.firebaseio.com",
+    "project_id": "family-board-ff352",
+    "storage_bucket": "family-board-ff352.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225090068697:android:8c34641a733e5f3e779ec8",
+        "android_client_info": {
+          "package_name": "com.hr.kurtovic.tomislav.familyboard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "225090068697-d0qhio85tc5kl4i9sa3e42ltp7k5knhf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hr.kurtovic.tomislav.familyboard",
+            "certificate_hash": "80c577e651665951b98ee776993f60dd891847d2"
+          }
+        },
+        {
+          "client_id": "225090068697-1uaoqec2b1sedrf2fcron5sm30f799ug.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANcbe1_1yF6H3AWeNtdp2RqlG_B1mCyiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "225090068697-1uaoqec2b1sedrf2fcron5sm30f799ug.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

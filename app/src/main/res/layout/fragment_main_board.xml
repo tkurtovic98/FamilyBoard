@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".BoardActivity"
+    >
+
+    <!-- RECYCLER VIEW CONTAINER -->
+    <LinearLayout
+        android:id="@+id/main_board_fragment_recyclerview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@id/main_board_fragment_input_container"
+        >
+
+        <!-- MESSAGE RECYCLER VIEW EMPTY -->
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/main_board_fragment_empty_message_tv"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Hello "/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/main_board_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <!-- ADD MESSAGE CONTAINER -->
+    <LinearLayout
+        android:id="@+id/main_board_fragment_input_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        style="@style/main_board_input_layout"
+        >
+
+        <!-- ADD FILE BUTTON -->
+        <ImageButton
+            android:id="@+id/main_board_fragment_input_add_file"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:contentDescription="Add file"
+            android:src="@drawable/ic_add_black_24dp" />
+
+        <!-- TEXT MESSAGE EDIT TEXT -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/main_board_fragment_input_add_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/text_input_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:textSize="@dimen/default_text_size" />
+
+        <!-- ADD MESSAGE BUTTON -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/main_board_fragment_input_send"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cornerRadius="@dimen/default_radius"
+            android:text="@string/btn_send" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
