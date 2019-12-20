@@ -5,20 +5,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.api.UserHelper
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.*
 
 class LauncherActivity : AppCompatActivity() {
 
     private var authInstance: FirebaseAuth? = null
 
     companion object {
-        private val RC_SIGN_IN = 123
+        private const val RC_SIGN_IN = 123
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +24,6 @@ class LauncherActivity : AppCompatActivity() {
         this.setContentView(R.layout.activity_main)
         initAuth()
         checkUserStatus()
-
-        log_out.setOnClickListener { logOut() }
     }
 
 
@@ -36,7 +32,7 @@ class LauncherActivity : AppCompatActivity() {
         this.handleResponseAfterSignIn(requestCode, requestCode, data)
     }
 
-
+    //todo implement log out somewhere else
     private fun logOut() {
         if (authInstance!!.currentUser != null) {
             authInstance!!.signOut()
@@ -79,7 +75,7 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     private fun initProviders(): List<AuthUI.IdpConfig> {
-        return Arrays.asList(
+        return listOf(
                 AuthUI.IdpConfig.EmailBuilder().build(),
                 AuthUI.IdpConfig.GoogleBuilder().build()
                 //                new AuthUI.IdpConfig.FacebookBuilder().build()
@@ -99,24 +95,35 @@ class LauncherActivity : AppCompatActivity() {
         val response = IdpResponse.fromResultIntent(data)
 
         when (requestCode) {
-            RC_SIGN_IN -> checkRespone(response)
+            RC_SIGN_IN -> checkResponse(response)
         }
     }
 
     @SuppressLint("RestrictedApi")
-    private fun checkRespone(response: IdpResponse?) {
+    private fun checkResponse(response: IdpResponse?) {
         if (response == null) {
             return
         }
 
-        if (response.isSuccessful) { // SUCCESS
-            createUserInFirestore()
-            loginUser()
-        } else { // ERRORS
-            if (response.error!!.errorCode == ErrorCodes.NO_NETWORK) {
-            } else if (response.error!!.errorCode == ErrorCodes.UNKNOWN_ERROR) {
+        when (response.isSuccessful) {
+            true -> {
+                createUserInFirestore()
+                loginUser()
+            }
+            false -> {
+                handleError(response)
             }
         }
+    }
+
+    //todo handle errors
+    private fun handleError(response: IdpResponse?) {
+
+//        when (response?.error!!.errorCode) {
+//            ErrorCodes.NO_NETWORK ->
+//
+//            ErrorCodes.UNKNOWN_ERROR->
+//        }
     }
 
     private fun createUserInFirestore() {

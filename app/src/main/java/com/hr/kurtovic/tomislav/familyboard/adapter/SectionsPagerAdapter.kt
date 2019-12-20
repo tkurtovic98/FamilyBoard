@@ -17,11 +17,12 @@ import java.util.*
  */
 class SectionsPagerAdapter(private val mContext: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    private var fragments: MutableList<Fragment> = ArrayList()
+    private var fragments: MutableList<Fragment> = arrayListOf()
 
     init {
         populateList()
     }
+
 
     private fun populateList() {
         fragments = ArrayList()

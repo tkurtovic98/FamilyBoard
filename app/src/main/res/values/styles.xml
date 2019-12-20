@@ -1,14 +1,5 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/grey</item>
-
-    </style>
 
     <style name="SignInStyle" parent="FirebaseUI">
         <item name="colorControlNormal">@color/colorPrimary</item>
@@ -17,14 +8,6 @@
         <item name="buttonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="main_board_recyclerview_item" parent="Theme.MaterialComponents">
         <item name="android:elevation">@dimen/basic_elevation</item>
@@ -40,6 +23,11 @@
         <item name="android:elevation">@dimen/basic_elevation</item>
         <item name="android:background">@drawable/main_board_message_input</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
+    </style>
+
+    <style name="profile_page">
+        <item name="android:background">@drawable/profile_page_background</item>
+        <item name="android:layout_margin">@dimen/default_margin</item>
     </style>
 
 </resources>

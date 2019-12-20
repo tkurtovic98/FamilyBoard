@@ -20,17 +20,21 @@ import kotlinx.android.synthetic.main.fragment_profile.*
  */
 class ProfileFragment : Fragment() {
 
+    companion object {
+        fun newInstance() = ProfileFragment
+    }
+
     private var currentUser: User? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_profile, container, false)
 
+    override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?)
+            : View? = inflater.inflate(R.layout.fragment_profile, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        this.getCurrentUserFromFirestore()
-
         profile_image.setOnClickListener { changeProfile() }
+        getCurrentUserFromFirestore()
     }
 
     private fun changeProfile() {
