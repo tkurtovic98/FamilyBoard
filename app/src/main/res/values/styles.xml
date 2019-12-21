@@ -8,24 +8,23 @@
         <item name="buttonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
     </style>
 
-
-    <style name="main_board_recyclerview_item" parent="Theme.MaterialComponents">
+    <style name="MainBoardRecyclerviewItem" parent="Theme.MaterialComponents">
         <item name="android:elevation">@dimen/basic_elevation</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.LargeComponent</item>
     </style>
 
     <style name="ShapeAppearance.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
+        <item name="cornerSize">@dimen/corner_size_small</item>
     </style>
 
-    <style name="main_board_input_layout">
+    <style name="MainboardInputLayout">
         <item name="android:elevation">@dimen/basic_elevation</item>
         <item name="android:background">@drawable/main_board_message_input</item>
         <item name="android:layout_margin">@dimen/margin_small</item>
     </style>
 
-    <style name="profile_page">
+    <style name="ProfilePage">
         <item name="android:background">@drawable/profile_page_background</item>
         <item name="android:layout_margin">@dimen/default_margin</item>
     </style>

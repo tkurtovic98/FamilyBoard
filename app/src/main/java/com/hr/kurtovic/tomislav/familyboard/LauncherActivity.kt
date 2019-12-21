@@ -32,16 +32,6 @@ class LauncherActivity : AppCompatActivity() {
         this.handleResponseAfterSignIn(requestCode, requestCode, data)
     }
 
-    //todo implement log out somewhere else
-    private fun logOut() {
-        if (authInstance!!.currentUser != null) {
-            authInstance!!.signOut()
-            Snackbar.make(main_activity_coordinator_layout, "Logged out successfully", Snackbar.LENGTH_LONG)
-                    .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
-                    .show()
-            progress_bar.hide()
-        }
-    }
 
     private fun initAuth() {
         authInstance = FirebaseAuth.getInstance()

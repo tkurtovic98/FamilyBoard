@@ -44,7 +44,6 @@ class SectionsPagerAdapter(private val mContext: Context, fm: FragmentManager) :
     }
 
     companion object {
-
         @StringRes
         private val TAB_TITLES = intArrayOf(R.string.list_tab, R.string.chat_tab, R.string.profile_tab)
     }

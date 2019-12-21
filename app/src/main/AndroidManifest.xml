@@ -11,8 +11,7 @@
         android:theme="@style/AppTheme.DayNight">
         <activity
             android:name=".BoardActivity"
-            android:label="@string/title_activity_board"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:label="@string/title_activity_board"></activity>
         <activity android:name=".LauncherActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

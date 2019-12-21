@@ -45,7 +45,7 @@ class ProfileFragment : Fragment() {
                     .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
                     .show()
             FirebaseAuth.getInstance().signOut()
-            //todo resolve logging out
+            //todo resolve logging outg
         }
     }
 

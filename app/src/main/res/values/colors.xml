@@ -9,6 +9,8 @@
 
     <color name="colorPrimaryLight">#B2FB8C00</color>
 
+    <color name="colorOnError">#b00020</color>>
+
     <color name="black">#000000</color>
     <color name="white">#fff</color>
     <color name="grey">#BBBBBB</color>
