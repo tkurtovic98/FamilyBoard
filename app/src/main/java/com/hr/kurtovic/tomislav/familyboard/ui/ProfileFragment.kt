@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.api.UserHelper
 import com.hr.kurtovic.tomislav.familyboard.models.User
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 /**
@@ -41,14 +41,14 @@ class ProfileFragment : Fragment() {
 
     private fun logOut() {
         if (FirebaseAuth.getInstance().currentUser != null) {
-            Snackbar.make(main_activity_coordinator_layout, "Logged out successfully", Snackbar.LENGTH_LONG)
-                    .setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
-                    .show()
             FirebaseAuth.getInstance().signOut()
-            //todo resolve logging outg
+            (activity as? MainActivity)?.showLoginScreen()
         }
     }
 
+    //todo implement changing of profile image
+
+    //Have to add RxPermission for local storage and file picker
     private fun changeProfile() {
         Snackbar.make(view!!, "Profile image change", Snackbar.LENGTH_LONG).show()
     }
@@ -64,7 +64,7 @@ class ProfileFragment : Fragment() {
 
     private fun loadProfileImage() {
         if (currentUser?.urlPicture != null) {
-            Glide.with(view!!)
+            Glide.with(this)
                     .load(currentUser?.urlPicture)
                     .apply(RequestOptions.circleCropTransform())
                     .into(profile_image)

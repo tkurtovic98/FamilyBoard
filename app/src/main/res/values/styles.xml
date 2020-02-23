@@ -1,11 +1,17 @@
 <resources>
 
+    <!-- LOGIN -->
+    <style name="TextAppearance.AppTheme.LoginTitle" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textColor">@color/white</item>
+    </style>
 
-    <style name="SignInStyle" parent="FirebaseUI">
-        <item name="colorControlNormal">@color/colorPrimary</item>
-        <item name="colorControlActivated">@color/colorPrimaryDark</item>
-        <item name="colorControlHighlight">@color/colorAccent</item>
-        <item name="buttonStyle">@style/Widget.MaterialComponents.FloatingActionButton</item>
+    <style name="SignIn" parent="Base.AppTheme">
+        <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="buttonStyle">@style/SignInButtonStyle</item>
+    </style>
+
+    <style name="SignInButtonStyle" parent="@style/Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="MainBoardRecyclerviewItem" parent="Theme.MaterialComponents">

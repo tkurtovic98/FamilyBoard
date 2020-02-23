@@ -33,13 +33,16 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
 
     // FOR DATA
     // 2 - Declaring Adapter and data
-    private var mainBoardMessageAdapter: MainBoardMessageAdapter? = null
-    private var modelCurrentUser: User? = null
+    private lateinit var mainBoardMessageAdapter: MainBoardMessageAdapter
+    private lateinit var modelCurrentUser: User
 
-    private val uriImageSelected: Uri? = null
+    private lateinit var uriImageSelected: Uri
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_main_board, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?
+        , savedInstanceState: Bundle?
+    )
+            : View? = inflater.inflate(R.layout.fragment_main_board, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,7 +55,7 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
     }
 
     override fun onDataChanged() {
-        main_board_fragment_empty_message_tv.visibility = if (this.mainBoardMessageAdapter!!.itemCount == 0)
+        main_board_fragment_empty_message_tv.visibility = if (this.mainBoardMessageAdapter.itemCount == 0)
             View.VISIBLE
         else
             View.GONE
@@ -68,15 +71,20 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
         }
 
         MessageHelper.createMessageForChat(
-                input, CurrentBoardKeyHolder.getInstance()!!.currentKey, modelCurrentUser!!)
+            input, CurrentBoardKeyHolder.getInstance()!!.currentKey, modelCurrentUser
+        )
                 .addOnFailureListener { Snackbar.make(this@RoomChatFragment.view!!, "Err", Snackbar.LENGTH_LONG) }
-        mainBoardMessageAdapter!!.notifyDataSetChanged()
+        mainBoardMessageAdapter.notifyDataSetChanged()
         main_board_fragment_input_add_text.setText("")
     }
 
     private fun getCurrentUserFromFirestore() {
         UserHelper.getUser(FirebaseAuth.getInstance().currentUser!!.uid)
-                .addOnSuccessListener { documentSnapshot -> modelCurrentUser = documentSnapshot.toObject(User::class.java) }
+                .addOnSuccessListener { documentSnapshot ->
+                    modelCurrentUser = documentSnapshot.toObject(
+                        User::class.java
+                    )!!
+                }
     }
 
     private fun configureRecyclerView() {
@@ -87,10 +95,10 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
                 this,
                 FirebaseAuth.getInstance().currentUser!!.uid
         )
-        mainBoardMessageAdapter!!.registerAdapterDataObserver(
+        mainBoardMessageAdapter.registerAdapterDataObserver(
                 object : RecyclerView.AdapterDataObserver() {
                     override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                        main_board_recyclerview.smoothScrollToPosition(mainBoardMessageAdapter!!.itemCount)
+                        main_board_recyclerview.smoothScrollToPosition(mainBoardMessageAdapter.itemCount)
                     }
                 }
         )

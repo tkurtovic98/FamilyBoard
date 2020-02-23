@@ -9,8 +9,11 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@color/grey</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="colorPrimarySurface">@color/colorPrimarySurface</item>
 
+        <item name="android:statusBarColor">@color/grey</item>
         <item name="colorOnError">@color/colorOnError</item>
 
     </style>

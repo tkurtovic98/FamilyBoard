@@ -14,4 +14,8 @@
     <string name="text_input_hint">What do you need ?</string>
     <string name="text_input_send">Send</string>
     <string name="btn_send">send</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_email">Enter email</string>
+    <string name="repeat_password">Repeat password</string>
+    <string name="sign_in">Sign in</string>
 </resources>

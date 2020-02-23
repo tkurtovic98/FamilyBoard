@@ -5,9 +5,9 @@
     <color name="colorAccent">#FFAB00</color>
 
     <color name="colorSecondary">#B22962FF</color>
-    <color name ="colorSecondaryDark">#B2003FFC</color>
+    <color name="colorSecondaryVariant">#B2003FFC</color>
 
-    <color name="colorPrimaryLight">#B2FB8C00</color>
+    <color name="colorPrimarySurface">#B2FB8C00</color>
 
     <color name="colorOnError">#b00020</color>>
 
