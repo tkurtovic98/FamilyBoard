@@ -31,7 +31,18 @@ import kotlinx.android.synthetic.main.fragment_main_board.*
  */
 class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
 
+
+    companion object {
+        fun newInstance() = RoomChatFragment()
+
+        private val PERMS = Manifest.permission.READ_EXTERNAL_STORAGE
+
+        private val RC_IMAGE_PERMS = 100
+        private val RC_CHOOSE_PHOTO = 200
+    }
+
     // FOR DATA
+
     // 2 - Declaring Adapter and data
     private lateinit var mainBoardMessageAdapter: MainBoardMessageAdapter
     private lateinit var modelCurrentUser: User
@@ -73,7 +84,13 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
         MessageHelper.createMessageForChat(
             input, CurrentBoardKeyHolder.getInstance()!!.currentKey, modelCurrentUser
         )
-                .addOnFailureListener { Snackbar.make(this@RoomChatFragment.view!!, "Err", Snackbar.LENGTH_LONG) }
+                .addOnFailureListener {
+                    Snackbar.make(
+                        this@RoomChatFragment.view!!,
+                        "Err",
+                        Snackbar.LENGTH_LONG
+                    )
+                }
         mainBoardMessageAdapter.notifyDataSetChanged()
         main_board_fragment_input_add_text.setText("")
     }
@@ -90,17 +107,17 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
     private fun configureRecyclerView() {
         //Configure Adapter & RecyclerView
         this.mainBoardMessageAdapter = MainBoardMessageAdapter(
-                generateOptionsForAdapter(MessageHelper.getAllMessageForChat(CurrentBoardKeyHolder.getInstance()!!.currentKey)),
-                Glide.with(this),
-                this,
-                FirebaseAuth.getInstance().currentUser!!.uid
+            generateOptionsForAdapter(MessageHelper.getAllMessageForChat(CurrentBoardKeyHolder.getInstance()!!.currentKey)),
+            Glide.with(this),
+            this,
+            FirebaseAuth.getInstance().currentUser!!.uid
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
-                object : RecyclerView.AdapterDataObserver() {
-                    override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                        main_board_recyclerview.smoothScrollToPosition(mainBoardMessageAdapter.itemCount)
-                    }
+            object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    main_board_recyclerview.smoothScrollToPosition(mainBoardMessageAdapter.itemCount)
                 }
+            }
         )
 
         main_board_recyclerview.layoutManager = LinearLayoutManager(context)
@@ -112,14 +129,6 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
                 .setQuery(query, Message::class.java)
                 .setLifecycleOwner(this)
                 .build()
-    }
-
-    companion object {
-
-        private val PERMS = Manifest.permission.READ_EXTERNAL_STORAGE
-
-        private val RC_IMAGE_PERMS = 100
-        private val RC_CHOOSE_PHOTO = 200
     }
 
 

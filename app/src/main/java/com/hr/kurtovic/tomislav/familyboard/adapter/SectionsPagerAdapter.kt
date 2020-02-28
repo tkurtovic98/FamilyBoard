@@ -26,9 +26,9 @@ class SectionsPagerAdapter(private val mContext: Context, fm: FragmentManager) :
 
     private fun populateList() {
         fragments = ArrayList()
-        fragments.add(ListRoomFragment())
-        fragments.add(RoomChatFragment())
-        fragments.add(ProfileFragment())
+        fragments.add(ListRoomFragment.newInstance())
+        fragments.add(RoomChatFragment.newInstance())
+        fragments.add(ProfileFragment.newInstance())
     }
 
     override fun getItem(position: Int): Fragment {

@@ -14,6 +14,14 @@ import com.hr.kurtovic.tomislav.familyboard.R
  */
 class ListRoomFragment : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? = inflater.inflate(R.layout.fragment_list_room, container, false)
+    companion object {
+        fun newInstance() = ListRoomFragment()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.fragment_list_room, container, false)
+
+
 }
