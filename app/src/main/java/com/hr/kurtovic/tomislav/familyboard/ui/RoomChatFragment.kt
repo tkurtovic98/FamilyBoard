@@ -4,7 +4,6 @@ package com.hr.kurtovic.tomislav.familyboard.ui
 import android.Manifest
 import android.net.Uri
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.CurrentBoardKeyHolder
@@ -62,7 +60,7 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
         this.getCurrentUserFromFirestore()
         this.configureRecyclerView()
 
-        main_board_fragment_input_send.setOnClickListener { send() }
+        main_board_input_add.setOnClickListener { openDialog() }
     }
 
     override fun onDataChanged() {
@@ -72,28 +70,39 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
             View.GONE
     }
 
-    private fun send() {
-        val input = main_board_fragment_input_add_text.text.toString()
-        if (TextUtils.isEmpty(input)) {
-            Snackbar.make(view!!, "Message can not be empty", Snackbar.LENGTH_LONG)
-                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
-                    .show()
-            return
-        }
+    private fun openDialog() {
 
-        MessageHelper.createMessageForChat(
-            input, CurrentBoardKeyHolder.getInstance()!!.currentKey, modelCurrentUser
-        )
-                .addOnFailureListener {
-                    Snackbar.make(
-                        this@RoomChatFragment.view!!,
-                        "Err",
-                        Snackbar.LENGTH_LONG
-                    )
-                }
-        mainBoardMessageAdapter.notifyDataSetChanged()
-        main_board_fragment_input_add_text.setText("")
+        val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
+                .setTitle("What do you need?")
+                .setMessage("Insert the message here")
+                .setPositiveButton("OK", null)
+                .show()
+
+
     }
+
+//    private fun send() {
+//        val input = main_board_fragment_input_add_text.text.toString()
+//        if (TextUtils.isEmpty(input)) {
+//            Snackbar.make(view!!, "Message can not be empty", Snackbar.LENGTH_LONG)
+//                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE)
+//                    .show()
+//            return
+//        }
+//
+//        MessageHelper.createMessageForChat(
+//            input, CurrentBoardKeyHolder.getInstance()!!.currentKey, modelCurrentUser
+//        )
+//                .addOnFailureListener {
+//                    Snackbar.make(
+//                        this@RoomChatFragment.view!!,
+//                        "Err",
+//                        Snackbar.LENGTH_LONG
+//                    )
+//                }
+//        mainBoardMessageAdapter.notifyDataSetChanged()
+//        main_board_fragment_input_add_text.setText("")
+//    }
 
     private fun getCurrentUserFromFirestore() {
         UserHelper.getUser(FirebaseAuth.getInstance().currentUser!!.uid)

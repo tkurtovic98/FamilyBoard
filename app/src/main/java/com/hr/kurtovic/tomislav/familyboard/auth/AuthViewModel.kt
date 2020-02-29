@@ -13,11 +13,11 @@ sealed class Event {
 
 class AuthViewModel(private val authService: AuthService) : ViewModel() {
 
-    val webClient = "225090068697-1uaoqec2b1sedrf2fcron5sm30f799ug.apps.googleusercontent.com"
+    private val webClient = "225090068697-1uaoqec2b1sedrf2fcron5sm30f799ug.apps.googleusercontent.com"
 
     val authInstance = FirebaseAuth.getInstance()
 
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+    val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(webClient)
             .requestEmail()
             .build()
