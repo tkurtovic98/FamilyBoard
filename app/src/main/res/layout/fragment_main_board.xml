@@ -38,8 +38,7 @@
         android:id="@+id/main_board_fragment_input_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_small"
-        android:background="@color/white"
+        android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/main_board_fragment_recyclerview_container"
         >
@@ -47,10 +46,10 @@
         <!-- ADD MESSAGE BUTTON -->
         <ImageButton
             android:id="@+id/main_board_input_add"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_black_24dp"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:src="@drawable/ic_add_24dp"
             app:cornerRadius="@dimen/default_radius"
             android:text="@string/btn_send"
             app:layout_constraintStart_toStartOf="parent"

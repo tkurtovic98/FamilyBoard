@@ -71,14 +71,10 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
     }
 
     private fun openDialog() {
-
         val materialAlertDialogBuilder = MaterialAlertDialogBuilder(context)
+                .setView(R.layout.main_board_input_dialog)
                 .setTitle("What do you need?")
-                .setMessage("Insert the message here")
-                .setPositiveButton("OK", null)
                 .show()
-
-
     }
 
 //    private fun send() {
@@ -133,12 +129,10 @@ class RoomChatFragment : Fragment(), MainBoardMessageAdapter.Listener {
         main_board_recyclerview.adapter = this.mainBoardMessageAdapter
     }
 
-    private fun generateOptionsForAdapter(query: Query): FirestoreRecyclerOptions<Message> {
-        return FirestoreRecyclerOptions.Builder<Message>()
-                .setQuery(query, Message::class.java)
-                .setLifecycleOwner(this)
-                .build()
-    }
+    private fun generateOptionsForAdapter(query: Query): FirestoreRecyclerOptions<Message> = FirestoreRecyclerOptions.Builder<Message>()
+            .setQuery(query, Message::class.java)
+            .setLifecycleOwner(this)
+            .build()
 
 
     /*private void uploadPhotoInFirebaseAndSendMessage(final String message) {
