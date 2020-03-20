@@ -3,15 +3,15 @@
 
     <item
         android:id="@+id/room_list_item"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_search"
         android:title="@string/list_tab" />
 
     <item
         android:id="@+id/main_chat_item"
-        android:icon="@drawable/ic_home_black_24dp"
+        android:icon="@drawable/ic_dashboard_black"
         android:title="@string/chat_tab" />
     <item
         android:id="@+id/profile_item"
-        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:icon="@drawable/ic_account_circle_black"
         android:title="@string/profile_tab" />
 </menu>

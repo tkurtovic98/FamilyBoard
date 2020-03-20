@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.MessageInputFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +28,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showMainBoard() {
-        replaceFragment(BoardFragment.newInstance())
+        replaceFragment(FragmentHolder.newInstance())
+    }
+
+    fun showMessageInputScreen() {
+        replaceFragment(MessageInputFragment.newInstance())
     }
 
     private fun replaceFragment(fragment: Fragment) {

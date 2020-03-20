@@ -1,7 +1,7 @@
 <resources>
 
     <!-- LOGIN -->
-    <style name="TextAppearance.AppTheme.LoginTitle" parent="TextAppearance.MaterialComponents.Headline2">
+    <style name="TextAppearance.AppTheme.Title" parent="TextAppearance.MaterialComponents.Headline2">
         <item name="android:textColor">@color/white</item>
         <item name="fontFamily">@font/roboto_bold</item>
     </style>
@@ -24,6 +24,12 @@
         <item name="android:textSize">@dimen/default_text_size</item>
     </style>
 
+    <!-- EditText -->
+    <style name="EditTextAuth" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/lightGrey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
 
     <style name="SignIn" parent="Base.AppTheme">
         <item name="buttonStyle">@style/SignInButtonStyle</item>

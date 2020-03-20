@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BoardFragment">
+    tools:context=".FragmentHolder">
 
     <!-- RECYCLER VIEW CONTAINER -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,7 +29,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_board_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="-16dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -40,18 +42,18 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_board_fragment_recyclerview_container"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/main_board_fragment_recyclerview_container">
 
         <!-- ADD MESSAGE BUTTON -->
         <ImageButton
             android:id="@+id/main_board_input_add"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/main_chat_add_button_width"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-            android:src="@drawable/ic_add_24dp"
-            app:cornerRadius="@dimen/default_radius"
-            android:text="@string/btn_send"
+            android:src="@drawable/ic_add"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

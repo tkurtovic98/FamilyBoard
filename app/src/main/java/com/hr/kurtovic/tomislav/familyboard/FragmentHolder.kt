@@ -6,23 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import com.google.android.material.tabs.TabLayout
-import com.hr.kurtovic.tomislav.familyboard.ui.ListRoomFragment
-import com.hr.kurtovic.tomislav.familyboard.ui.ProfileFragment
-import com.hr.kurtovic.tomislav.familyboard.ui.RoomChatFragment
-import kotlinx.android.synthetic.main.activity_board_2.*
+import com.hr.kurtovic.tomislav.familyboard.fragments.ListRoomFragment
+import com.hr.kurtovic.tomislav.familyboard.fragments.ProfileFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardFragment
+import kotlinx.android.synthetic.main.activity_board.*
 
-class BoardFragment : Fragment() {
+
+class FragmentHolder : Fragment() {
 
     companion object {
-        fun newInstance() = BoardFragment()
+        fun newInstance() = FragmentHolder()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?
         , savedInstanceState: Bundle?
     )
-            : View? = inflater.inflate(R.layout.activity_board_2, container, false)
+            : View? = inflater.inflate(R.layout.activity_board, container, false)
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,6 +47,7 @@ class BoardFragment : Fragment() {
             }
             false
         }
+
     }
 
     private fun showListRoom() {
@@ -54,7 +55,7 @@ class BoardFragment : Fragment() {
     }
 
     private fun showMainChat() {
-        replaceFragment(RoomChatFragment.newInstance())
+        replaceFragment(MainBoardFragment.newInstance())
     }
 
     private fun showProfile() {
@@ -67,25 +68,5 @@ class BoardFragment : Fragment() {
         fragmentManager?.commit {
             replace(R.id.main_board_fragment_container, fragment, tag)
         }
-    }
-}
-//        val sectionsPagerAdapter = SectionsPagerAdapter(context!!, fragmentManager!!)
-//
-//        view_pager.adapter = sectionsPagerAdapter
-//        tabs.setupWithViewPager(view_pager)
-//
-//        view_pager.currentItem = 1
-//        setTabIcons(tabs!!)
-
-
-private fun setTabIcons(tabs: TabLayout) {
-    val icons = intArrayOf(
-        R.drawable.ic_search_black_24dp,
-        R.drawable.ic_home_black_24dp,
-        R.drawable.ic_account_circle_black_24dp
-    )
-
-    for (i in 0 until tabs.tabCount) {
-        tabs.getTabAt(i)!!.setIcon(icons[i])
     }
 }

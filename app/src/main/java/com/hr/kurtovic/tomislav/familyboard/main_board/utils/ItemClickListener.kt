@@ -1,4 +1,4 @@
-package com.hr.kurtovic.tomislav.familyboard.main_board
+package com.hr.kurtovic.tomislav.familyboard.main_board.utils
 
 interface ItemClickListener {
 

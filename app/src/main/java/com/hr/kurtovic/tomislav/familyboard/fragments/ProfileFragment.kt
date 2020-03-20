@@ -1,4 +1,4 @@
-package com.hr.kurtovic.tomislav.familyboard.ui
+package com.hr.kurtovic.tomislav.familyboard.fragments
 
 
 import android.os.Bundle

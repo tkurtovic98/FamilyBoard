@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.hr.kurtovic.tomislav.familyboard.R
-import com.hr.kurtovic.tomislav.familyboard.ui.ListRoomFragment
-import com.hr.kurtovic.tomislav.familyboard.ui.ProfileFragment
-import com.hr.kurtovic.tomislav.familyboard.ui.RoomChatFragment
+import com.hr.kurtovic.tomislav.familyboard.fragments.ListRoomFragment
+import com.hr.kurtovic.tomislav.familyboard.fragments.ProfileFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardFragment
 import java.util.*
 
 /**
@@ -27,7 +27,7 @@ class SectionsPagerAdapter(private val mContext: Context, fm: FragmentManager) :
     private fun populateList() {
         fragments = ArrayList()
         fragments.add(ListRoomFragment.newInstance())
-        fragments.add(RoomChatFragment.newInstance())
+        fragments.add(MainBoardFragment.newInstance())
         fragments.add(ProfileFragment.newInstance())
     }
 
