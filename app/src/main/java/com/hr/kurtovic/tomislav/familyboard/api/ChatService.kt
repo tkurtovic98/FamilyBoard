@@ -3,7 +3,7 @@ package com.hr.kurtovic.tomislav.familyboard.api
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
-object ChatHelper {
+object ChatService {
 
     private const val COLLECTION_NAME = "chats"
 

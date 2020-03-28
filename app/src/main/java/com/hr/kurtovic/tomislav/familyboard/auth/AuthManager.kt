@@ -11,10 +11,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.hr.kurtovic.tomislav.familyboard.api.UserHelper
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 
 
-class AuthManager {
+class AuthManager(private val userService: FamilyMemberService) {
 
     companion object {
         val authInstance = FirebaseAuth.getInstance()
@@ -22,8 +22,6 @@ class AuthManager {
     }
 
     fun isUserLogged() = authInstance.currentUser != null
-
-    fun currentUser() = authInstance.currentUser
 
     fun listOfProviders(): List<AuthUI.IdpConfig> =
             listOf(
@@ -47,7 +45,7 @@ class AuthManager {
             val username = currentUser.displayName
             val uid = currentUser.uid
 
-            UserHelper.createUser(uid, username!!, urlPicture!!).addOnFailureListener { }
+            userService.createUser(uid, username!!, urlPicture!!).addOnFailureListener { }
         }
     }
 

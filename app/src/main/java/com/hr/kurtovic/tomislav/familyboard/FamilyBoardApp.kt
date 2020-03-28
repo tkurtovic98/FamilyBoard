@@ -1,10 +1,18 @@
 package com.hr.kurtovic.tomislav.familyboard
 
 import android.app.Application
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberServiceImpl
+import com.hr.kurtovic.tomislav.familyboard.api.MessageService
+import com.hr.kurtovic.tomislav.familyboard.api.MessageServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthManager
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthViewModel
+import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsService
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsServiceImpl
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -21,15 +29,17 @@ class FamilyBoardApp : Application() {
             androidContext(this@FamilyBoardApp)
             modules(
                 listOf(
-                    firebaseAuth, authentication
+                    api, authentication, mainBoard, pets
                 )
             )
         }
     }
 }
 
-val firebaseAuth = module {
-    single { AuthManager() }
+val api = module {
+    single { AuthManager(get()) }
+    single<FamilyMemberService> { FamilyMemberServiceImpl() }
+    single<MessageService> { MessageServiceImpl() }
 }
 
 val authentication = module {
@@ -37,4 +47,15 @@ val authentication = module {
     single<AuthService> { AuthServiceImpl() }
 
     viewModel { AuthViewModel(get()) }
+}
+
+val pets = module {
+    single<PetsService> { PetsServiceImpl() }
+
+    viewModel { PetsViewModel(get(), get()) }
+}
+
+val mainBoard = module {
+
+    viewModel { MainBoardViewModel() }
 }

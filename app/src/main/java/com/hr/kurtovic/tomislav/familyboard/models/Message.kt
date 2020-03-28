@@ -1,27 +1,16 @@
 package com.hr.kurtovic.tomislav.familyboard.models
 
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.ServerTimestamp
 import java.util.*
 
-class Message {
-
-    var id: String? = null
-    var message: String? = null
+data class Message(
+    @DocumentId
+    val id: String? = null,
+    val category: String? = null,
     @get:ServerTimestamp
-    var dateCreated: Date? = null
-    var userSender: User? = null
-    var urlImage: String? = null
-    var isAccepted = false
-
-    constructor() {}
-
-    constructor(message: String, userSender: User) {
-        this.message = message
-        this.userSender = userSender
-
-    }
-
-    constructor(message: String, userSender: User, urlImage: String) : this(message, userSender) {
-        this.urlImage = urlImage
-    }
-}
+    val dateCreated: Date? = null,
+    val memberRef: DocumentReference? = null,
+    val content: Map<String, String>? = null
+)

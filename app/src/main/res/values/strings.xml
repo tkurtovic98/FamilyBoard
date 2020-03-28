@@ -22,4 +22,6 @@
     <string name="put_on_board">Put on board</string>
     <string name="pets">Pets</string>
     <string name="until_when">Until when?</string>
+    <string name="what_to_do_pets">What to do?</string>
+    <string name="who_pets">Who?</string>
 </resources>

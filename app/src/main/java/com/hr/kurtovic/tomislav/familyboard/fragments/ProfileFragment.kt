@@ -12,8 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
-import com.hr.kurtovic.tomislav.familyboard.api.UserHelper
-import com.hr.kurtovic.tomislav.familyboard.models.User
+import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 /**
@@ -25,7 +24,7 @@ class ProfileFragment : Fragment() {
         fun newInstance() = ProfileFragment()
     }
 
-    private var currentUser: User? = null
+    private var currentUser: FamilyMember? = null
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +33,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         profile_image.setOnClickListener { changeProfile() }
-        getCurrentUserFromFirestore()
+//        getCurrentUserFromFirestore()
 
         logout.setOnClickListener { logOut() }
     }
@@ -53,14 +52,14 @@ class ProfileFragment : Fragment() {
         Snackbar.make(view!!, "Profile image change", Snackbar.LENGTH_LONG).show()
     }
 
-    private fun getCurrentUserFromFirestore() {
-        UserHelper.getUser(FirebaseAuth.getInstance().currentUser!!.uid)
-                .addOnSuccessListener { documentSnapshot ->
-                    currentUser = documentSnapshot.toObject(User::class.java)
-                    loadProfileImage()
-                    setUserInfo()
-                }
-    }
+//    private fun getCurrentUserFromFirestore() {
+//        UserService.getUser(FirebaseAuth.getInstance().currentUser!!.uid)
+//                .addOnSuccessListener { documentSnapshot ->
+//                    currentUser = documentSnapshot.toObject(User::class.java)
+//                    loadProfileImage()
+//                    setUserInfo()
+//                }
+//    }
 
     private fun loadProfileImage() {
         if (currentUser?.urlPicture != null) {

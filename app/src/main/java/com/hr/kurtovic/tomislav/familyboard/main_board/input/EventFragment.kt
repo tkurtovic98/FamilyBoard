@@ -11,14 +11,18 @@ import com.hr.kurtovic.tomislav.familyboard.R
 /**
  * A simple [Fragment] subclass.
  */
-class PetsFragment : Fragment() {
+class EventFragment : Fragment() {
+
+    companion object {
+        fun newInstance() = EventFragment()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pets, container, false)
+        return inflater.inflate(R.layout.fragment_event, container, false)
     }
 
 
