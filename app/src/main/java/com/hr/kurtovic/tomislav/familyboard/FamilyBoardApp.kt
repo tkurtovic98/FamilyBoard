@@ -3,8 +3,8 @@ package com.hr.kurtovic.tomislav.familyboard
 import android.app.Application
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberServiceImpl
-import com.hr.kurtovic.tomislav.familyboard.api.MessageService
-import com.hr.kurtovic.tomislav.familyboard.api.MessageServiceImpl
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthManager
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
@@ -39,7 +39,7 @@ class FamilyBoardApp : Application() {
 val api = module {
     single { AuthManager(get()) }
     single<FamilyMemberService> { FamilyMemberServiceImpl() }
-    single<MessageService> { MessageServiceImpl() }
+    single<FamilyMessageService> { FamilyMessageServiceImpl() }
 }
 
 val authentication = module {

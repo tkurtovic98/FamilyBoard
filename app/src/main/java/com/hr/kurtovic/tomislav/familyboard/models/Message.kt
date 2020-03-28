@@ -11,6 +11,6 @@ data class Message(
     val category: String? = null,
     @get:ServerTimestamp
     val dateCreated: Date? = null,
-    val memberRef: DocumentReference? = null,
+    val memberSenderRef: DocumentReference? = null,
     val content: Map<String, String>? = null
 )

@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
-import com.hr.kurtovic.tomislav.familyboard.api.MessageService
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MainBoardMessageAdapter
 import kotlinx.android.synthetic.main.fragment_main_board.*
 import org.koin.android.ext.android.inject
@@ -29,7 +29,7 @@ class MainBoardFragment : Fragment() {
         fun newInstance() = MainBoardFragment()
     }
 
-    private val messageService: MessageService by inject()
+    private val messageService: FamilyMessageService by inject()
     private val mainBoardViewModel: MainBoardViewModel by viewModel()
 
     override fun onCreateView(

@@ -62,7 +62,8 @@ class PetsViewModel(
                 "who" to input.whoInput,
                 "what" to input.whatInput,
                 "until" to input.untilWhenInput
-            )
+            ),
+            memberSenderRef = familyMemberService.currentUserRef()
         )
         petsService.postPetMessage(message)
     }
