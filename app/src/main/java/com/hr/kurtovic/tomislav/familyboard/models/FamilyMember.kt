@@ -1,9 +1,12 @@
 package com.hr.kurtovic.tomislav.familyboard.models
 
+import com.google.firebase.firestore.DocumentId
+
 data class FamilyMember(
-    val uid: String? = null,
-    val name: String? = null,
-    val role: String? = null,
-    val urlPicture: String? = null
+    @DocumentId
+    var uid: String? = null,
+    var name: String? = null,
+    var role: String? = null,
+    var urlPicture: String? = null
 )
 

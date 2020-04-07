@@ -1,11 +1,7 @@
 package com.hr.kurtovic.tomislav.familyboard
 
 import android.app.Application
-import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
-import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberServiceImpl
-import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
-import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageServiceImpl
-import com.hr.kurtovic.tomislav.familyboard.auth.AuthManager
+import com.hr.kurtovic.tomislav.familyboard.api.*
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthViewModel
@@ -37,20 +33,20 @@ class FamilyBoardApp : Application() {
 }
 
 val api = module {
-    single { AuthManager(get()) }
     single<FamilyMemberService> { FamilyMemberServiceImpl() }
     single<FamilyMessageService> { FamilyMessageServiceImpl() }
+    single<FamilyService> { FamilyServiceImpl() }
 }
 
 val authentication = module {
 
     single<AuthService> { AuthServiceImpl() }
 
-    viewModel { AuthViewModel(get()) }
+    viewModel { AuthViewModel(get(), get()) }
 }
 
 val pets = module {
-    single<PetsService> { PetsServiceImpl() }
+    single<PetsService> { PetsServiceImpl(get()) }
 
     viewModel { PetsViewModel(get(), get()) }
 }

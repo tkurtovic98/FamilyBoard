@@ -49,6 +49,10 @@ class MainBoardFragment : Fragment() {
     private fun render(board: Board) {
         main_board_fragment_empty_message_tv.isVisible = board.isEmpty
 
+        if (board.currentFamilyName.isEmpty()) {
+            return
+        }
+
         if (board.familyNameIsChanging) {
             this.configureRecyclerView(board.currentFamilyName)
             mainBoardViewModel.onEvent(Event.NewFamilyBoardLoaded)
@@ -68,16 +72,14 @@ class MainBoardFragment : Fragment() {
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
             object : RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeChanged(positionStart, itemCount)
+                    mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
+                }
+
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                    main_board_recyclerview.smoothScrollToPosition(mainBoardMessageAdapter.itemCount)
-                    mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
+                    main_board_recyclerview.smoothScrollToPosition(itemCount)
                 }
-
-                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
-                    super.onItemRangeRemoved(positionStart, itemCount)
-                    mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
-                }
-
             }
         )
 

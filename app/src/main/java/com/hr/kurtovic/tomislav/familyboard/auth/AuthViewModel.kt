@@ -3,8 +3,10 @@ package com.hr.kurtovic.tomislav.familyboard.auth
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import io.reactivex.disposables.CompositeDisposable
 
 data class Response(
@@ -14,12 +16,17 @@ data class Response(
 
 
 sealed class Event {
+    data class SignInWithGoogle(val acct: GoogleSignInAccount) : Event()
     data class LoginSubmit(val email: String, val password: String) : Event()
     object LogoutSubmit : Event()
 }
 
-class AuthViewModel(private val authService: AuthService) : ViewModel() {
+class AuthViewModel(
+    private val authService: AuthService,
+    private val familyMemberService: FamilyMemberService
+) : ViewModel() {
 
+    //TODO(Extract webclient to strings)
     private val webClient = "225090068697-1uaoqec2b1sedrf2fcron5sm30f799ug.apps.googleusercontent.com"
 
     val authInstance = FirebaseAuth.getInstance()
@@ -36,6 +43,7 @@ class AuthViewModel(private val authService: AuthService) : ViewModel() {
     val responseObserver: LiveData<Response> = internalResponseObserver
 
     fun onEvent(event: Event) {
+
         when (event) {
             is Event.LoginSubmit -> authService.login(
                 event.email,
@@ -47,6 +55,11 @@ class AuthViewModel(private val authService: AuthService) : ViewModel() {
                 authService.logout()
                 internalResponseObserver.postValue(Response(true))
             }
+            is Event.SignInWithGoogle -> familyMemberService.createMember(
+                uid = familyMemberService.currentMemberId,
+                memberName = event.acct.displayName!!,
+                urlPicture = event.acct.photoUrl.toString()
+            )
         }
     }
 

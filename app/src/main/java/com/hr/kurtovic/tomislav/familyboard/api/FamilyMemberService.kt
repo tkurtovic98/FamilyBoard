@@ -1,7 +1,6 @@
 package com.hr.kurtovic.tomislav.familyboard.api
 
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
@@ -9,50 +8,44 @@ import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 
 interface FamilyMemberService {
 
-    fun currentUserRef(): DocumentReference
-    fun createUser(uid: String, userName: String, urlPicture: String): Task<Void>
-    fun getUser(uid: String): Task<DocumentSnapshot>
-    fun updateUserName(userName: String, uid: String, field: String): Task<Void>
-    fun deleteUser(uid: String): Task<Void>
-    val currentMember: FamilyMember
-    val membersCollection: String
+    fun currentMemberRef(): DocumentReference
+    fun createMember(uid: String, memberName: String, urlPicture: String): Task<Void>
+    fun getMember(uid: String): Task<DocumentSnapshot>
+    fun updateMemberName(memberName: String, uid: String, field: String): Task<Void>
+    fun deleteMember(uid: String): Task<Void>
+    val currentMemberId: String
 }
 
 class FamilyMemberServiceImpl : FamilyMemberService {
 
-    override val membersCollection
-        get() = "Members"
+    private val membersCollection
+        get() = ApiUtil.MEMBERS_COLLECTION
 
-    override val currentMember: FamilyMember
-        get() =
-            getUser(FirebaseAuth.getInstance().currentUser!!.uid).result.let {
-                it?.toObject(
-                    FamilyMember::class.java
-                )!!
-            }
+    override val currentMemberId: String
+        get() = k FirebaseAuth . getInstance ().currentUser!!.uid
 
-    override fun currentUserRef(): DocumentReference {
-        return ApiUtil.collection(membersCollection).document(currentMember.uid!!)
+    override fun currentMemberRef(): DocumentReference {
+        return ApiUtil.collection(membersCollection).document(currentMemberId)
     }
 
     // CREATE
-    override fun createUser(uid: String, userName: String, urlPicture: String): Task<Void> {
-        val userToCreate = FamilyMember(uid, userName, urlPicture)
-        return ApiUtil.collection(membersCollection).document(uid).set(userToCreate)
+    override fun createMember(uid: String, memberName: String, urlPicture: String): Task<Void> {
+        val memberToCreate = FamilyMember(uid = uid, name = memberName, urlPicture = urlPicture)
+        return ApiUtil.collection(membersCollection).document(uid).set(memberToCreate)
     }
 
     // GET
-    override fun getUser(uid: String): Task<DocumentSnapshot> {
+    override fun getMember(uid: String): Task<DocumentSnapshot> {
         return ApiUtil.collection(membersCollection).document(uid).get()
     }
 
     // UPDATE
-    override fun updateUserName(userName: String, uid: String, field: String): Task<Void> {
-        return ApiUtil.collection(membersCollection).document(uid).update(field, userName)
+    override fun updateMemberName(memberName: String, uid: String, field: String): Task<Void> {
+        return ApiUtil.collection(membersCollection).document(uid).update(field, memberName)
     }
 
     // DELETE
-    override fun deleteUser(uid: String): Task<Void> {
+    override fun deleteMember(uid: String): Task<Void> {
         return ApiUtil.collection(membersCollection).document(uid).delete()
     }
 

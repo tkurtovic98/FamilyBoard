@@ -7,10 +7,10 @@ import java.util.*
 
 data class Message(
     @DocumentId
-    val id: String? = null,
-    val category: String? = null,
+    var id: String? = null,
+    var category: String? = null,
     @get:ServerTimestamp
-    val dateCreated: Date? = null,
-    val memberSenderRef: DocumentReference? = null,
-    val content: Map<String, String>? = null
+    var dateCreated: Date? = null,
+    var memberSenderRef: DocumentReference? = null,
+    var content: Map<String, String>? = null
 )

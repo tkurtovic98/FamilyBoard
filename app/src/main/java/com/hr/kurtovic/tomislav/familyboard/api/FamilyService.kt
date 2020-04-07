@@ -1,32 +1,36 @@
 package com.hr.kurtovic.tomislav.familyboard.api
 
+import com.google.android.gms.tasks.Task
+import com.hr.kurtovic.tomislav.familyboard.models.Family
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 
 
 interface FamilyService {
 
-    fun addFamilyMember(familyMember: FamilyMember)
-    fun deleteFamilyMember(familyMember: FamilyMember)
-    fun updateFamilyName(familyName: String)
-    fun changeCurrentFamilyName()
+    fun addFamily(family: Family): Task<Void>
+    fun addFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
+    fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
 
 }
 
 class FamilyServiceImpl : FamilyService {
-    override fun addFamilyMember(familyMember: FamilyMember) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
 
-    override fun deleteFamilyMember(familyMember: FamilyMember) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    private val familiesCollection = ApiUtil.collection(ApiUtil.FAMILIES_COLLECTION)
 
-    override fun updateFamilyName(familyName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun addFamily(family: Family): Task<Void> = familiesCollection.document(family.name!!).set(
+        family
+    )
 
-    override fun changeCurrentFamilyName() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun addFamilyMember(
+        familyName: String,
+        familyMember: FamilyMember
+    ): Task<Void> =
+            familiesCollection.document(familyName).collection(ApiUtil.MEMBERS_COLLECTION)
+                    .document(familyMember.uid!!).set(familyMember)
+
+
+    override fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void> =
+            familiesCollection.document(familyName).collection(ApiUtil.MEMBERS_COLLECTION)
+                    .document(familyMember.uid!!).delete()
 
 }

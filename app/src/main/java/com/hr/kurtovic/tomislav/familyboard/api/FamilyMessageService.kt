@@ -11,21 +11,17 @@ interface FamilyMessageService {
     fun messages(familyName: String): Query
     fun postMessage(message: Message, familyName: String): Task<DocumentReference>
     fun setMessageId(familyName: String, id: String): Task<Void>
-    val familiesCollection: String
 }
 
 class FamilyMessageServiceImpl : FamilyMessageService {
 
-    override val familiesCollection
-        get() = "Families"
 
     private fun collection(familyName: String): CollectionReference =
-            ApiUtil.collection(familiesCollection)
+            ApiUtil.collection(ApiUtil.FAMILIES_COLLECTION)
                     .document(familyName)
-                    .collection("messages")
+                    .collection(ApiUtil.MESSAGES_COLLECTION)
 
     override fun messages(familyName: String): Query {
-        2
         return this.collection(familyName)
                 .orderBy("dateCreated")
                 .limit(50)

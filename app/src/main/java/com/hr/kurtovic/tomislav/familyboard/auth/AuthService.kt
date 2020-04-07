@@ -6,30 +6,20 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 interface AuthService {
-
     fun login(email: String?, password: String?): Task<AuthResult>
-
     fun logout()
-
-    fun changeProfile(email: String, role: String)
-
 }
 
 
 class AuthServiceImpl : AuthService {
 
-    private var authInstance = FirebaseAuth.getInstance()
-
+    private val authInstance = FirebaseAuth.getInstance()
 
     override fun login(email: String?, password: String?) =
             authInstance.signInWithEmailAndPassword(email!!, password!!)
 
     override fun logout() {
         authInstance.signOut()
-    }
-
-    override fun changeProfile(email: String, role: String) {
-
     }
 
 }

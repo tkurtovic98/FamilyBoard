@@ -15,7 +15,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun updateWithMessage(message: Message, currentUserId: String) {
 
-        message.userRef?.get()?.addOnSuccessListener {
+        message.memberSenderRef?.get()?.addOnSuccessListener {
             val memberSender = it.toObject(FamilyMember::class.java)
 
             //Check if current user is the sender

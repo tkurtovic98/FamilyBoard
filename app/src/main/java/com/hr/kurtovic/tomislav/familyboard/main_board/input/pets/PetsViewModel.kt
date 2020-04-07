@@ -11,19 +11,28 @@ data class Input(
     val whatInput: String = "",
     val whoInput: String = "",
     val untilWhenInput: String = "",
-    val postingInProgress: Boolean = false
+    val postingInProgress: Boolean = false,
+    val familyName: String = ""
 )
 
 sealed class Event {
     data class WhatInputChange(val whatInput: String) : Event()
     data class WhoInputChange(val whoInput: String) : Event()
     data class UntilWhenInputChange(val untilWhenInput: String) : Event()
-    object Submit : Event()
+    data class Submit(val familyName: String) : Event()
+    object Submitted : Event()
 }
 
 fun reduce(input: Input, event: Event): Input =
         when (event) {
-            Event.Submit -> input.copy(postingInProgress = true)
+            Event.Submitted -> input.copy(postingInProgress = false)
+            is Event.Submit -> input.copy(
+                familyName = event.familyName,
+                postingInProgress = true,
+                whatInput = "",
+                whoInput = "",
+                untilWhenInput = ""
+            )
             is Event.WhatInputChange -> input.copy(whatInput = event.whatInput)
             is Event.WhoInputChange -> input.copy(whoInput = event.whoInput)
             is Event.UntilWhenInputChange -> input.copy(untilWhenInput = event.untilWhenInput)
@@ -57,15 +66,15 @@ class PetsViewModel(
         //todo check if who exists in room
         //todo check if when is valid time
         val message = Message(
-            category = "pets",
             content = mapOf(
                 "who" to input.whoInput,
                 "what" to input.whatInput,
                 "until" to input.untilWhenInput
             ),
-            memberSenderRef = familyMemberService.currentUserRef()
+            memberSenderRef = familyMemberService.currentMemberRef()
         )
-        petsService.postPetMessage(message)
+        petsService.postPetMessage(message, input.familyName)
+        onEvent(Event.Submitted)
     }
 
     override fun onCleared() {
