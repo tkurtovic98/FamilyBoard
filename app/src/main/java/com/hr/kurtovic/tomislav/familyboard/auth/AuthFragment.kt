@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -90,9 +91,12 @@ class AuthFragment : Fragment() {
                     if (task.isSuccessful) {
                         Log.d(TAG, "signInWithCredential:success")
                         authViewModel.onEvent(Event.SignInWithGoogle(acct))
-                        (activity as MainActivity).showMainBoard()
                     } else {
-
+                        Toast.makeText(
+                            context,
+                            "Login not successful, try again.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
 
                 }

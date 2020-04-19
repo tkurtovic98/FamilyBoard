@@ -1,6 +1,7 @@
 package com.hr.kurtovic.tomislav.familyboard.api
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
@@ -22,7 +23,7 @@ class FamilyMemberServiceImpl : FamilyMemberService {
         get() = ApiUtil.MEMBERS_COLLECTION
 
     override val currentMemberId: String
-        get() = k FirebaseAuth . getInstance ().currentUser!!.uid
+        get() = FirebaseAuth.getInstance().currentUser!!.uid
 
     override fun currentMemberRef(): DocumentReference {
         return ApiUtil.collection(membersCollection).document(currentMemberId)

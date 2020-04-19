@@ -55,11 +55,14 @@ class AuthViewModel(
                 authService.logout()
                 internalResponseObserver.postValue(Response(true))
             }
-            is Event.SignInWithGoogle -> familyMemberService.createMember(
+            is Event.SignInWithGoogle -> {
+                familyMemberService.createMember(
                 uid = familyMemberService.currentMemberId,
                 memberName = event.acct.displayName!!,
                 urlPicture = event.acct.photoUrl.toString()
             )
+                internalResponseObserver.postValue(Response(true))
+            }
         }
     }
 
