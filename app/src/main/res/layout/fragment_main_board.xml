@@ -51,8 +51,8 @@
             android:id="@+id/main_board_input_add"
             android:layout_width="@dimen/main_chat_add_button_width"
             android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
             android:src="@drawable/ic_add"
+            android:backgroundTint="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

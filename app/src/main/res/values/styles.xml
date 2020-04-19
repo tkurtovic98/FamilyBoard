@@ -11,12 +11,15 @@
         <item name="shapeAppearanceOverlay">@style/ButtonAppearance</item>
     </style>
 
+    <style name="DefaultImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="background">@drawable/rounded_background_primary_color</item>
+        <item name="shapeAppearance">@style/ButtonAppearance</item>
+    </style>
+
     <style name="ButtonAppearance">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/default_radius</item>
     </style>
-
-    <style name="DefaultImageButtonStyle" parent="Widget.AppCompat.ImageButton"></style>
 
     <!-- TEXT -->
     <style name="DefaultTextStyle">
