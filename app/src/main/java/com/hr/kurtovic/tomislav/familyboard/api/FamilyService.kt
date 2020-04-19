@@ -1,6 +1,7 @@
 package com.hr.kurtovic.tomislav.familyboard.api
 
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.CollectionReference
 import com.hr.kurtovic.tomislav.familyboard.models.Family
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 
@@ -10,6 +11,7 @@ interface FamilyService {
     fun addFamily(family: Family): Task<Void>
     fun addFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
     fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
+    fun showFamilies(): CollectionReference
 
 }
 
@@ -17,9 +19,12 @@ class FamilyServiceImpl : FamilyService {
 
     private val familiesCollection = ApiUtil.collection(ApiUtil.FAMILIES_COLLECTION)
 
-    override fun addFamily(family: Family): Task<Void> = familiesCollection.document(family.name!!).set(
-        family
-    )
+    override fun showFamilies(): CollectionReference {
+        return familiesCollection
+    }
+
+    override fun addFamily(family: Family): Task<Void> =
+            familiesCollection.document(family.name!!).set(family)
 
     override fun addFamilyMember(
         familyName: String,
@@ -32,5 +37,6 @@ class FamilyServiceImpl : FamilyService {
     override fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void> =
             familiesCollection.document(familyName).collection(ApiUtil.MEMBERS_COLLECTION)
                     .document(familyMember.uid!!).delete()
+
 
 }

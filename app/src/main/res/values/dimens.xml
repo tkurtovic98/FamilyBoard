@@ -29,6 +29,9 @@
 
     <dimen name="recycler_view_stroke_width_default">2dp</dimen>
     <dimen name="corner_size_small">4dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_large">32dp</dimen>
     <dimen name="default_padding">16dp</dimen>
     <dimen name="padding_small">8dp</dimen>
 

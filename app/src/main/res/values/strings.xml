@@ -24,4 +24,6 @@
     <string name="until_when">Until when?</string>
     <string name="what_to_do_pets">What to do?</string>
     <string name="who_pets">Who?</string>
+    <string name="enter_family_name_or_code">Enter family name or code</string>
+    <string name="no_families_to_display">No families to display</string>
 </resources>

@@ -5,6 +5,7 @@ import com.hr.kurtovic.tomislav.familyboard.api.*
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthViewModel
+import com.hr.kurtovic.tomislav.familyboard.family_list.FamilyListViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsService
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsServiceImpl
@@ -25,7 +26,7 @@ class FamilyBoardApp : Application() {
             androidContext(this@FamilyBoardApp)
             modules(
                 listOf(
-                    api, authentication, mainBoard, pets
+                    api, authentication, mainBoard, pets, familyList
                 )
             )
         }
@@ -52,6 +53,9 @@ val pets = module {
 }
 
 val mainBoard = module {
-
     viewModel { MainBoardViewModel() }
+}
+
+val familyList = module {
+    viewModel { FamilyListViewModel(get(), get()) }
 }
