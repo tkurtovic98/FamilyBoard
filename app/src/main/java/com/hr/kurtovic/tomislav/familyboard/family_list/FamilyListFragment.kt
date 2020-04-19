@@ -1,4 +1,4 @@
-package com.hr.kurtovic.tomislav.familyboard.fragments
+package com.hr.kurtovic.tomislav.familyboard.family_list
 
 
 import android.os.Bundle
@@ -12,16 +12,16 @@ import com.hr.kurtovic.tomislav.familyboard.R
 /**
  * A simple [Fragment] subclass.
  */
-class ListRoomFragment : Fragment() {
+class FamilyListFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ListRoomFragment()
+        fun newInstance() = FamilyListFragment()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_list_room, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_family_list, container, false)
 
 
 }

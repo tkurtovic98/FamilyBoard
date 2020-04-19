@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyService
-import com.hr.kurtovic.tomislav.familyboard.fragments.ListRoomFragment
+import com.hr.kurtovic.tomislav.familyboard.family_list.FamilyListFragment
 import com.hr.kurtovic.tomislav.familyboard.fragments.ProfileFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardFragment
 import com.hr.kurtovic.tomislav.familyboard.models.Family
@@ -89,7 +89,7 @@ class FragmentHolder : Fragment() {
     }
 
     private fun showListRoom() {
-        replaceFragment(ListRoomFragment.newInstance())
+        replaceFragment(FamilyListFragment.newInstance())
     }
 
     private fun showFamilyBoard() {
