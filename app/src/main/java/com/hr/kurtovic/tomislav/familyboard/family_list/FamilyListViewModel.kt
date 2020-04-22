@@ -1,37 +1,97 @@
 package com.hr.kurtovic.tomislav.familyboard.family_list
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestoreException
+import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyService
 import com.hr.kurtovic.tomislav.familyboard.models.Family
+import com.hr.kurtovic.tomislav.familyboard.util.Box
 
 data class State(
-    val familyList: List<String> = emptyList<String>(),
     val familyName: String = "",
-    val submitInProgress: Boolean = false,
-    val submitError: Boolean = false,
-    val isEmpty: Boolean = true
+    val submitError: Box<Int> = Box(),
+    val isEmpty: Boolean = true,
+    val familyAddInProgress: Boolean = false,
+    val memberToFamilyAddInProgress: Boolean = false,
+    val successMessage: String = ""
 )
+
 
 sealed class Event {
     data class FamilyNameChange(val familyName: String) : Event()
     object FamilyAdd : Event()
-    data class FamilySubmitted(val submitError: Boolean) : Event()
+    object FamilyAdded : Event()
+
+    data class FamilyMemberAdd(val familyName: String) : Event()
+    object FamilyMemberAdded : Event()
+
     data class ListDataChanged(val isEmpty: Boolean) : Event()
+    data class ErrorEvent(val error: Error) : Event()
+}
+
+sealed class Error {
+
+    data class FamilyAddError(val exception: Exception) : Error() {
+        @StringRes
+        fun errorMessageId(): Int =
+                when ((exception as FirebaseFirestoreException).code) {
+                    FirebaseFirestoreException.Code.ABORTED -> R.string.family_add_aborted
+                    FirebaseFirestoreException.Code.ALREADY_EXISTS -> R.string.family_add_already_exists
+                    FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> R.string.family_add_unable
+                    else -> R.string.family_add_generic
+                }
+    }
+
+    data class FamilyMemberAddError(val exception: Exception) : Error() {
+        @StringRes
+        fun errorMessageId(): Int =
+                when ((exception as FirebaseFirestoreException).code) {
+                    FirebaseFirestoreException.Code.ABORTED -> R.string.family_member_add_aborted
+                    FirebaseFirestoreException.Code.ALREADY_EXISTS -> R.string.family_add_already_exists
+                    FirebaseFirestoreException.Code.RESOURCE_EXHAUSTED -> R.string.family_member_add_unable
+
+                    else -> R.string.family_member_add_generic
+                }
+    }
+
+
 }
 
 fun reduce(currentState: State, event: Event): State =
         when (event) {
-            Event.FamilyAdd -> currentState.copy(submitInProgress = true)
-            is Event.FamilySubmitted -> currentState.copy(
-                submitInProgress = false,
-                submitError = event.submitError,
-                familyName = ""
+            Event.FamilyAdd -> currentState.copy(familyAddInProgress = true)
+            is Event.FamilyAdded -> currentState.copy(
+                familyName = "",
+                familyAddInProgress = false
             )
             is Event.FamilyNameChange -> currentState.copy(familyName = event.familyName)
             is Event.ListDataChanged -> currentState.copy(isEmpty = event.isEmpty)
+            is Event.FamilyMemberAdd -> currentState.copy(
+                familyName = event.familyName,
+                memberToFamilyAddInProgress = true
+            )
+            is Event.FamilyMemberAdded -> currentState.copy(
+                memberToFamilyAddInProgress = false
+            )
+
+            is Event.ErrorEvent -> {
+                val messageId = when (event.error) {
+                    is Error.FamilyAddError -> event.error.errorMessageId()
+                    is Error.FamilyMemberAddError -> event.error.errorMessageId()
+                }
+
+                currentState.copy(
+                    submitError = Box(messageId),
+                    familyAddInProgress = false,
+                    memberToFamilyAddInProgress = false
+                )
+            }
+
+
         }
 
 class FamilyListViewModel(
@@ -39,17 +99,8 @@ class FamilyListViewModel(
     private val familyMemberService: FamilyMemberService
 ) : ViewModel() {
 
-    var internalState = MutableLiveData<State>().apply {
-        familyService.showFamilies().addSnapshotListener { querySnapshot, e ->
-            if (e != null) {
-                value = State()
-                return@addSnapshotListener
-            }
-
-            val list = querySnapshot?.toObjects(Family::class.java)!!
-
-            value = State(familyList = list.map { family: Family? -> family?.name!! })
-        }
+    private val internalState = MutableLiveData<State>().apply {
+        value = State()
     }
 
     val state: LiveData<State> = internalState
@@ -59,33 +110,36 @@ class FamilyListViewModel(
         val newState = reduce(currentState, event)
         internalState.postValue(newState)
 
-        if (newState.submitInProgress) {
-            if (newState.familyName in newState.familyList) {
-                onEvent(Event.FamilySubmitted(submitError = true))
-                return
-            }
+        if (newState.familyAddInProgress) {
             addFamily(newState)
-//            familyService.addFamily(Family(name = newState.familyName))
-//            onEvent(Event.FamilySubmitted(submitError = false))
+        }
+
+        if (newState.memberToFamilyAddInProgress) {
+            addFamilyMember(newState.familyName)
         }
     }
 
     private fun addFamily(state: State) {
-        familyService.addFamily(Family(name = "Kurtović")).addOnSuccessListener {
-//            familyMemberService.getMember(familyMemberService.currentMemberId)
-//                    .addOnSuccessListener { memberSnapshot ->
-//                        val familyMember = memberSnapshot?.toObject(FamilyMember::class.java)!!
-//                        familyService.addFamilyMember("Kurtović", familyMember)
-//                                .addOnSuccessListener {
-//                                }.addOnFailureListener {
-//                                }
-//
-//                    }
-            onEvent(Event.FamilySubmitted(submitError = false))
+        //TODO(check for errors in input)
+        familyService.addFamily(Family(name = state.familyName)).addOnSuccessListener {
+            onEvent(Event.FamilyAdded)
         }.addOnFailureListener {
-            onEvent(Event.FamilySubmitted(submitError = true))
+            onEvent(Event.ErrorEvent(Error.FamilyAddError(it)))
         }
+    }
 
+    private fun addFamilyMember(familyName: String) {
+        //TODO(add family to member)
+        val memberId = familyMemberService.currentMemberId
+        familyService.addFamilyMember(familyName, memberId).addOnSuccessListener {
+            familyMemberService.addFamily(memberId, familyName).addOnSuccessListener {
+                onEvent(Event.FamilyMemberAdded)
+            }.addOnFailureListener { e ->
+                onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
+            }
+        }.addOnFailureListener { e ->
+            onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
+        }
     }
 
 }

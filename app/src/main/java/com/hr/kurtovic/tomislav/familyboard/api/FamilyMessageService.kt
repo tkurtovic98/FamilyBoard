@@ -17,7 +17,7 @@ class FamilyMessageServiceImpl : FamilyMessageService {
 
 
     private fun collection(familyName: String): CollectionReference =
-            ApiUtil.collection(ApiUtil.FAMILIES_COLLECTION)
+            ApiUtil.rootCollection(ApiUtil.FAMILIES_COLLECTION)
                     .document(familyName)
                     .collection(ApiUtil.MESSAGES_COLLECTION)
 

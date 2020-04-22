@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +46,7 @@ class MainBoardFragment : Fragment() {
     }
 
     private fun render(board: Board) {
-        main_board_fragment_empty_message_tv.isVisible = board.isEmpty
+        main_board_fragment_empty_message_tv.visibility = if (board.isEmpty) View.GONE else View.VISIBLE
 
         if (board.currentFamilyName.isEmpty()) {
             return

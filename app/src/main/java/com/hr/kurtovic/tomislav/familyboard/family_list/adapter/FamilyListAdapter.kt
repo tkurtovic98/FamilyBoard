@@ -7,20 +7,25 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.models.Family
 
+interface FamilyListItemListener {
+    fun onItemClick(familyName: String)
+}
 
 class FamilyListAdapter(
-    options: FirestoreRecyclerOptions<Family>
+    options: FirestoreRecyclerOptions<Family>,
+    private val listener: FamilyListItemListener
 ) : FirestoreRecyclerAdapter<Family, FamilyListViewHolder>(options) {
+
 
     override fun onBindViewHolder(
         familyListViewHolder: FamilyListViewHolder,
         i: Int,
         family: Family
     ) {
-        familyListViewHolder.updateWithFamily(
-            family
-        )
+        familyListViewHolder.updateWithFamily(family)
+        familyListViewHolder.addListener(listener)
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             FamilyListViewHolder(

@@ -5,22 +5,25 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_background_white"
     android:paddingStart="@dimen/padding_large"
+    android:layout_marginTop="@dimen/margin_small"
+    android:layout_marginBottom="@dimen/margin_small"
     android:paddingEnd="@dimen/default_padding">
 
     <TextView
         android:id="@+id/family_list_family_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/colorPrimary"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_weight="6"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/family_list_add_member_to_familiy"
+        app:layout_constraintRight_toLeftOf="@id/family_list_add_member_to_family"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/family_list_add_member_to_familiy"
+        android:id="@+id/family_list_add_member_to_family"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="?android:selectableItemBackground"

@@ -61,6 +61,7 @@
             android:id="@+id/family_list_no_families_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="@string/no_families_to_display"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4"
@@ -73,7 +74,6 @@
             android:id="@+id/family_list_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="@dimen/default_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
