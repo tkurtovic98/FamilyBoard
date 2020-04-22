@@ -10,8 +10,12 @@
         android:id="@+id/email_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_marginRight="@dimen/default_margin"
+        android:background="@drawable/rounded_background_primary_color"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
         <ImageView
             android:id="@+id/ic_email"
@@ -31,7 +35,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:hint="@string/enter_email"
-            android:textColorHint="@color/white"
+            style="@style/EditTextAuth"
+            android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="5"
             app:layout_constraintStart_toEndOf="@+id/ic_email"
@@ -44,6 +49,10 @@
         android:id="@+id/password_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginRight="@dimen/default_margin"
+        android:background="@drawable/rounded_background_primary_color"
         app:layout_constraintEnd_toEndOf="@+id/email_field"
         app:layout_constraintStart_toStartOf="@+id/email_field"
         app:layout_constraintTop_toBottomOf="@id/email_field">
@@ -66,7 +75,8 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:hint="@string/enter_password"
-            android:textColorHint="@color/white"
+            style="@style/EditTextAuth"
+            android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_weight="5"
             app:layout_constraintStart_toEndOf="@+id/ic_password"
@@ -75,49 +85,19 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/repeat_password_field"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/password_field"
-        app:layout_constraintStart_toStartOf="@+id/password_field"
-        app:layout_constraintTop_toBottomOf="@id/password_field">
-
-        <ImageView
-            android:id="@+id/ic_password_repeat"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_lock_outline"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/password_repeat_input"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/password_repeat_input"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:hint="@string/repeat_password"
-            android:textColorHint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="5"
-            app:layout_constraintStart_toEndOf="@+id/ic_password_repeat"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/Register"
-        android:layout_width="match_parent"
+        android:id="@+id/sign_in_button"
+        style="@style/DefaultButtonStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Register"
-        app:layout_constraintEnd_toEndOf="@+id/repeat_password_field"
-        app:layout_constraintStart_toStartOf="@+id/repeat_password_field"
-        app:layout_constraintTop_toBottomOf="@+id/repeat_password_field" />
+        android:layout_marginTop="@dimen/margin_large"
+        android:text="@string/sign_in"
+        app:layout_constraintEnd_toEndOf="@+id/password_field"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/password_field"
+
+        app:layout_constraintTop_toBottomOf="@+id/password_field" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

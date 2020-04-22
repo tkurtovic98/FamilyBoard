@@ -1,61 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_board_message_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="140dp"
+    android:layout_marginStart="@dimen/margin_large"
+    android:layout_marginTop="@dimen/default_margin"
+    android:layout_marginEnd="@dimen/margin_large"
+    android:layout_marginBottom="@dimen/default_margin"
+    android:background="@drawable/rounded_background_primary_color"
+    android:backgroundTint="@color/white">
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
+
+    <ImageView
+        android:id="@+id/main_board_message_image"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/ic_account_circle_black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/main_board_message_accept_button"
+        style="@style/DefaultButtonStyle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/default_margin"
-        >
+        android:text="Check it out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/main_board_message_image" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New request"
+        app:layout_constraintBottom_toTopOf="@+id/main_board_message_accept_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/main_board_message_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.228" />
 
-            <ImageView
-                android:id="@+id/main_board_message_image"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center"
-                android:background="@color/fui_transparent"
-                android:layout_marginTop="@dimen/default_margin"
-                android:src="@drawable/com_facebook_profile_picture_blank_square" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/main_board_message_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/fui_transparent" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/main_board_message_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/default_margin"
-                android:background="@color/fui_transparent"
-
-                android:textAlignment="center" />
-
-            <LinearLayout
-                android:id="@+id/main_board_button_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_small"
-                android:background="@color/fui_transparent"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/main_board_message_accept_button"
-                    style="@style/Widget.MaterialComponents.Button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Accept" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
