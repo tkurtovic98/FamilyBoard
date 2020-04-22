@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme.DayNight" parent="Base.AppTheme" />
+    <style name="AppTheme.DayNight" parent="Base.AppTheme">
+
+        <item name="android:buttonStyle">@style/DefaultButtonStyle</item>
+        <item name="buttonStyle">@style/DefaultButtonStyle</item>
+        <item name="imageButtonStyle">@style/DefaultImageButtonStyle</item>
+    </style>
 
     <!-- Base application theme. -->
     <style name="Base.AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -11,10 +16,12 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
-        <item name="colorPrimarySurface">@color/colorPrimarySurface</item>
 
         <item name="android:statusBarColor">@color/grey</item>
         <item name="colorOnError">@color/colorOnError</item>
+
+        <item name="android:windowBackground">@drawable/ic_background</item>
+
 
     </style>
 </resources>

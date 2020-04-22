@@ -18,4 +18,28 @@
     <string name="enter_email">Enter email</string>
     <string name="repeat_password">Repeat password</string>
     <string name="sign_in">Sign in</string>
+    <string name="register">Register here</string>
+    <string name="put_on_board">Put on board</string>
+    <string name="pets">Pets</string>
+    <string name="until_when">Until when?</string>
+    <string name="what_to_do_pets">What to do?</string>
+    <string name="who_pets">Who?</string>
+    <string name="enter_family_name_or_code">Enter family name or code</string>
+    <string name="no_families_to_display">No families to display</string>
+
+    <!-- Family List -->
+    <string name="family_add_message">Adding family</string>
+    <string name="family_member_add_message">Adding you to family</string>
+
+    <!--Errors -->
+    <string name="family_add_unable">Unable to add new family at the moment.</string>
+    <string name="family_add_aborted">Adding of new family was canceled.</string>
+    <string name="family_add_already_exists">That family name already exists, try another one</string>
+    <string name="family_add_generic">Problem while adding family</string>
+
+    <string name="family_member_add_unable">Unable to add member to family at the moment.</string>
+    <string name="family_member_add_aborted">Adding of member to family was canceled.</string>
+    <string name="family_member_already_in_family">You are already a member of this family!</string>
+    <string name="family_member_add_generic">Problem while adding family member</string>
+
 </resources>
