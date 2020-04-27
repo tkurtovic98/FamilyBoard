@@ -44,6 +44,7 @@ class MessageInputFragment : Fragment() {
         }
     }
 
+
     private fun showPets() {
         replaceFragment(PetsFragment.newInstance())
     }
@@ -59,6 +60,7 @@ class MessageInputFragment : Fragment() {
 
     private fun replaceFragment(fragment: Fragment) {
         val tag = fragment::class.java.simpleName
+        fragment.arguments = arguments
         fragmentManager?.commit {
             replace(R.id.message_input_container, fragment, tag)
         }

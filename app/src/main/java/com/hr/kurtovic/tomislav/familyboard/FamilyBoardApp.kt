@@ -10,6 +10,7 @@ import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsService
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsViewModel
+import com.hr.kurtovic.tomislav.familyboard.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -26,7 +27,7 @@ class FamilyBoardApp : Application() {
             androidContext(this@FamilyBoardApp)
             modules(
                 listOf(
-                    api, authentication, mainBoard, pets, familyList
+                    api, authentication, mainBoard, pets, familyList, profileFragment
                 )
             )
         }
@@ -58,4 +59,8 @@ val mainBoard = module {
 
 val familyList = module {
     viewModel { FamilyListViewModel(get(), get()) }
+}
+
+val profileFragment = module {
+    viewModel { ProfileViewModel(get(), get()) }
 }

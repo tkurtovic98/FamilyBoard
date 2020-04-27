@@ -24,12 +24,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class MainBoardFragment : Fragment() {
 
+    private val messageService: FamilyMessageService by inject()
+    private val mainBoardViewModel: MainBoardViewModel by viewModel()
+
     companion object {
         fun newInstance() = MainBoardFragment()
     }
-
-    private val messageService: FamilyMessageService by inject()
-    private val mainBoardViewModel: MainBoardViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?
@@ -40,20 +40,19 @@ class MainBoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         main_board_input_add.setOnClickListener { openInputFragment() }
-        mainBoardViewModel.board.observe(viewLifecycleOwner, Observer { render(it) })
+        mainBoardViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
-    private fun render(board: Board) {
-        main_board_fragment_empty_message_tv.visibility = if (board.isEmpty) View.GONE else View.VISIBLE
+    private fun render(state: State) {
+        main_board_fragment_empty_message_tv.visibility = if (state.isEmpty) View.VISIBLE else View.GONE
 
-        if (board.currentFamilyName.isEmpty()) {
+        if (state.currentFamilyName.isEmpty()) {
             return
         }
 
-        if (board.familyNameIsChanging) {
-            this.configureRecyclerView(board.currentFamilyName)
+        if (state.familyNameIsChanging) {
+            this.configureRecyclerView(state.currentFamilyName)
             mainBoardViewModel.onEvent(Event.NewFamilyBoardLoaded)
         }
     }

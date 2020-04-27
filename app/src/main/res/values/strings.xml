@@ -41,5 +41,6 @@
     <string name="family_member_add_aborted">Adding of member to family was canceled.</string>
     <string name="family_member_already_in_family">You are already a member of this family!</string>
     <string name="family_member_add_generic">Problem while adding family member</string>
+    <string name="family_name_key">FAMILY_NAME</string>
 
 </resources>

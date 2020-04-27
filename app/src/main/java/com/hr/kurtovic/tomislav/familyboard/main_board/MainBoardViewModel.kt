@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-data class Board(
+data class State(
     val currentFamilyName: String = "",
     val familyNameIsChanging: Boolean = true,
     val isEmpty: Boolean = true
@@ -17,26 +17,28 @@ sealed class Event {
     object NewFamilyBoardLoaded : Event()
 }
 
-fun changeBoard(event: Event, board: Board): Board =
+fun reduce(event: Event, state: State): State =
         when (event) {
-            is Event.NewFamilyBoardLoaded -> board.copy(familyNameIsChanging = false)
-            is Event.FamilyNameChange -> board.copy(
+            is Event.NewFamilyBoardLoaded -> state.copy(familyNameIsChanging = false)
+            is Event.FamilyNameChange -> state.copy(
                 currentFamilyName = event.familyName,
                 familyNameIsChanging = true
             )
-            is Event.BoardDataChange -> board.copy(isEmpty = event.isEmpty)
+            is Event.BoardDataChange -> state.copy(isEmpty = event.isEmpty)
         }
 
-class MainBoardViewModel : ViewModel() {
+class MainBoardViewModel() : ViewModel() {
 
-    private var internalBoard = MutableLiveData<Board>().apply { value = Board() }
+    private var internalState = MutableLiveData<State>().apply {
+        value = State()
+    }
 
-    val board: LiveData<Board> = internalBoard
+    val state: LiveData<State> = internalState
 
     fun onEvent(event: Event) {
-        val currentBoard = internalBoard.value!!
-        val newBoard = changeBoard(event, currentBoard)
-        internalBoard.postValue(newBoard)
+        val currentBoard = internalState.value!!
+        val newBoard = reduce(event, currentBoard)
+        internalState.postValue(newBoard)
     }
 
 }

@@ -9,7 +9,6 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.hr.kurtovic.tomislav.familyboard.R
-import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
 import kotlinx.android.synthetic.main.fragment_pets.*
 import kotlinx.android.synthetic.main.fragment_pets.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,11 +19,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class PetsFragment : Fragment() {
 
     private val petsViewModel: PetsViewModel by viewModel()
-    private val mainBoardViewModel: MainBoardViewModel by viewModel()
 
     companion object {
         fun newInstance() = PetsFragment()
-        private var familyName = ""
     }
 
     override fun onCreateView(
@@ -39,20 +36,21 @@ class PetsFragment : Fragment() {
         pets_what_input.doAfterTextChanged { petsViewModel.onEvent(Event.WhatInputChange(it.toString())) }
         pets_who_input.doAfterTextChanged { petsViewModel.onEvent(Event.WhoInputChange(it.toString())) }
         pets_when_input.doAfterTextChanged { petsViewModel.onEvent(Event.UntilWhenInputChange(it.toString())) }
-        view.submit_button.setOnClickListener { petsViewModel.onEvent(Event.Submit(familyName)) }
+        view.submit_button.setOnClickListener { submit() }
 
-        petsViewModel.input.observe(viewLifecycleOwner, Observer { render(it) })
-        mainBoardViewModel.board.observe(
-            viewLifecycleOwner,
-            Observer { familyName = it.currentFamilyName })
+
+        petsViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
-    private fun render(input: Input) {
-        if (input.postingInProgress) {
-            pets_what_input.setText(input.whatInput)
-            pets_who_input.setText(input.whoInput)
-            pets_when_input.setText(input.untilWhenInput)
-        }
+    private fun submit() {
+        //TODO(Family name change check)
+        petsViewModel.onEvent(Event.Submit(familyName = ""))
+    }
+
+    private fun render(input: State) {
+        pets_what_input.setText(input.whatInput)
+        pets_who_input.setText(input.whoInput)
+        pets_when_input.setText(input.untilWhenInput)
     }
 
 }

@@ -32,12 +32,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showMessageInputScreen() {
-        replaceFragment(MessageInputFragment.newInstance())
+        replaceFragment(MessageInputFragment.newInstance(), addToBackStack = true)
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = false) {
         val tag = fragment::class.java.simpleName
+        val currentFragment = supportFragmentManager.findFragmentByTag(tag)
+        if (currentFragment?.isVisible == true) {
+            return;
+        }
         supportFragmentManager.commit {
+            if (addToBackStack) {
+                addToBackStack(tag)
+            }
             replace(R.id.fragmentContainer, fragment, tag)
         }
     }

@@ -7,7 +7,7 @@ import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.models.Message
 import io.reactivex.disposables.CompositeDisposable
 
-data class Input(
+data class State(
     val whatInput: String = "",
     val whoInput: String = "",
     val untilWhenInput: String = "",
@@ -23,19 +23,21 @@ sealed class Event {
     object Submitted : Event()
 }
 
-fun reduce(input: Input, event: Event): Input =
+fun reduce(state: State, event: Event): State =
         when (event) {
-            Event.Submitted -> input.copy(postingInProgress = false)
-            is Event.Submit -> input.copy(
-                familyName = event.familyName,
-                postingInProgress = true,
+            Event.Submitted -> state.copy(
+                postingInProgress = false,
                 whatInput = "",
                 whoInput = "",
                 untilWhenInput = ""
             )
-            is Event.WhatInputChange -> input.copy(whatInput = event.whatInput)
-            is Event.WhoInputChange -> input.copy(whoInput = event.whoInput)
-            is Event.UntilWhenInputChange -> input.copy(untilWhenInput = event.untilWhenInput)
+            is Event.Submit -> state.copy(
+                familyName = event.familyName,
+                postingInProgress = true
+            )
+            is Event.WhatInputChange -> state.copy(whatInput = event.whatInput)
+            is Event.WhoInputChange -> state.copy(whoInput = event.whoInput)
+            is Event.UntilWhenInputChange -> state.copy(untilWhenInput = event.untilWhenInput)
         }
 
 
@@ -45,24 +47,24 @@ class PetsViewModel(
 ) :
     ViewModel() {
 
-    private val internalInput = MutableLiveData<Input>().apply { value = Input() }
+    private val internalState = MutableLiveData<State>().apply { value = State() }
 
     private val compositeDisposable = CompositeDisposable()
 
-    val input: LiveData<Input> = internalInput
+    val state: LiveData<State> = internalState
 
     fun onEvent(event: Event) {
-        val currentInput = internalInput.value!!
-        val newInput = reduce(currentInput, event)
-        internalInput.postValue(newInput)
+        val currentState = internalState.value!!
+        val newState = reduce(currentState, event)
+        internalState.postValue(newState)
 
-        if (newInput.postingInProgress) {
-            postMessage(newInput)
+        if (newState.postingInProgress) {
+            postMessage(newState)
         }
 
     }
 
-    private fun postMessage(input: Input) {
+    private fun postMessage(input: State) {
         //todo check if who exists in room
         //todo check if when is valid time
         val message = Message(
