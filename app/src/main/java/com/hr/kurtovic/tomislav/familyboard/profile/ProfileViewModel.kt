@@ -5,18 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
-import io.reactivex.disposables.CompositeDisposable
 
 class ProfileViewModel(
-    private val familyMemberService: FamilyMemberService,
+    familyMemberService: FamilyMemberService,
     private val authService: AuthService
 ) : ViewModel() {
 
     private val internalFamilyChange = MutableLiveData<List<String>>().apply { value = emptyList() }
 
     val familyChange: LiveData<List<String>> = internalFamilyChange
-
-    val compositeDisposable = CompositeDisposable()
 
     private val familyChangeListener = familyMemberService.families()
             .addSnapshotListener { querySnapshot, _ ->

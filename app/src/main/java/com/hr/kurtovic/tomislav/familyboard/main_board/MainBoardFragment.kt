@@ -13,10 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
+import com.hr.kurtovic.tomislav.familyboard.SharedViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MainBoardMessageAdapter
 import kotlinx.android.synthetic.main.fragment_main_board.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -26,6 +28,7 @@ class MainBoardFragment : Fragment() {
 
     private val messageService: FamilyMessageService by inject()
     private val mainBoardViewModel: MainBoardViewModel by viewModel()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
 
     companion object {
         fun newInstance() = MainBoardFragment()
@@ -40,8 +43,13 @@ class MainBoardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        main_board_input_add.setOnClickListener { openInputFragment() }
+
+        sharedViewModel.sharedFamilyName.observe(
+            viewLifecycleOwner,
+            Observer { mainBoardViewModel.onEvent(Event.FamilyNameChange(it)) })
         mainBoardViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
+
+        main_board_input_add.setOnClickListener { openInputFragment() }
     }
 
     private fun render(state: State) {
@@ -70,13 +78,13 @@ class MainBoardFragment : Fragment() {
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
             object : RecyclerView.AdapterDataObserver() {
-                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                    super.onItemRangeChanged(positionStart, itemCount)
+                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeRemoved(positionStart, itemCount)
                     mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
                 }
-
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     main_board_recyclerview.smoothScrollToPosition(itemCount)
+                    mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
                 }
             }
         )
