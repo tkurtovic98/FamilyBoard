@@ -46,7 +46,7 @@ class MainBoardFragment : Fragment() {
 
         sharedViewModel.sharedFamilyName.observe(
             viewLifecycleOwner,
-            Observer { mainBoardViewModel.onEvent(Event.FamilyNameChange(it)) })
+            Observer { mainBoardViewModel.onEvent(Event.FamilyNameChange) })
         mainBoardViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
 
         main_board_input_add.setOnClickListener { openInputFragment() }
@@ -55,12 +55,8 @@ class MainBoardFragment : Fragment() {
     private fun render(state: State) {
         main_board_fragment_empty_message_tv.visibility = if (state.isEmpty) View.VISIBLE else View.GONE
 
-        if (state.currentFamilyName.isEmpty()) {
-            return
-        }
-
         if (state.familyNameIsChanging) {
-            this.configureRecyclerView(state.currentFamilyName)
+            this.configureRecyclerView()
             mainBoardViewModel.onEvent(Event.NewFamilyBoardLoaded)
         }
     }
@@ -70,10 +66,10 @@ class MainBoardFragment : Fragment() {
     }
 
 
-    private fun configureRecyclerView(name: String) {
+    private fun configureRecyclerView() {
         //Configure Adapter & RecyclerView
         val mainBoardMessageAdapter = MainBoardMessageAdapter(
-            generateOptionsForAdapter(messageService.messages(familyName = name)),
+            generateOptionsForAdapter(messageService.messages()),
             FirebaseAuth.getInstance().currentUser!!.uid
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
@@ -82,6 +78,7 @@ class MainBoardFragment : Fragment() {
                     super.onItemRangeRemoved(positionStart, itemCount)
                     mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
                 }
+
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     main_board_recyclerview.smoothScrollToPosition(itemCount)
                     mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))

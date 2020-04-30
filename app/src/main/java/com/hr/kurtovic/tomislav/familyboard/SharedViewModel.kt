@@ -20,11 +20,17 @@ class SharedViewModel(val context: Context) : ViewModel() {
     }
 
     private fun retrieveFamilyName(): String? =
-            context.getSharedPreferences("FAMILY_SHARED_PREFS", Context.MODE_PRIVATE)
+            context.getSharedPreferences(
+                context.getString(R.string.family_shared_prefs),
+                Context.MODE_PRIVATE
+            )
                     .getString(R.string.family_name_key.toString(), "")
 
     private fun setFamilySharedPref(familyName: String) {
-        context.getSharedPreferences("FAMILY_SHARED_PREFS", Context.MODE_PRIVATE)
+        context.getSharedPreferences(
+            context.getString(R.string.family_shared_prefs),
+            Context.MODE_PRIVATE
+        )
                 .edit()
                 .putString(R.string.family_name_key.toString(), familyName)
                 .apply()
