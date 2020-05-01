@@ -92,5 +92,9 @@
         <item name="android:translationZ">4dp</item>
     </style>
 
+    <style name="CustomSpinnerStyle" parent="@style/Widget.AppCompat.Spinner">
+        <item name="overlapAnchor">true</item>
+        <item name="android:background">@drawable/custom_spinner_background</item>
+    </style>
 
 </resources>

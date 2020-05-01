@@ -45,10 +45,10 @@ class ProfileFragment : Fragment() {
     private fun configureSpinner(families: List<String>) {
         val familyAdapter = ArrayAdapter<String>(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.custom_spinner_dropdown,
             families
         ).apply {
-            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            setDropDownViewResource(R.layout.custom_spinner_dropdown)
         }
 
         profile_family_spinner.apply {
@@ -68,14 +68,6 @@ class ProfileFragment : Fragment() {
                             .show()
                 }
 
-//                private fun saveFamilyName(familyName: String) {
-//
-//                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
-//                    with(sharedPref.edit()) {
-//                        putString(getString(R.string.family_name_key), familyName)
-//                        commit()
-//                    }
-//                }
             })
         }
 

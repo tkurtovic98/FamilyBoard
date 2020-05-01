@@ -37,28 +37,21 @@
         <TextView
             android:id="@+id/profile_member_name"
             style="@style/ProfileTextViewStyle"
-            android:layout_marginTop="@dimen/margin_large"
             android:text="Tomislav Kurtović"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/profile_member_role"
-            style="@style/ProfileTextViewStyle"
-            android:text="Brother and son"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/profile_member_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Spinner
         android:id="@+id/profile_family_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_large"
+        style="@style/CustomSpinnerStyle"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintStart_toStartOf="@id/profile_member_info_container"
         app:layout_constraintTop_toBottomOf="@id/profile_member_info_container" />
 
@@ -70,7 +63,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_family_spinner">
 
-        <include layout="@layout/profile_progress_indicators" />
+        <include
+            layout="@layout/profile_progress_indicators"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
