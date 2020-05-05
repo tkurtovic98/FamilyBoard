@@ -38,11 +38,10 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        profileViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
         val currentFamilyName = Box(sharedViewModel.sharedFamilyName.value)
-        profileViewModel.familyChange.observe(
+        profileViewModel.state.observe(
             viewLifecycleOwner,
-            Observer { configureSpinner(it, currentFamilyName) })
+            Observer { render(it, currentFamilyName) })
         profile_logout_button.setOnClickListener { logout() }
     }
 
@@ -51,10 +50,10 @@ class ProfileFragment : Fragment() {
         (activity as? MainActivity)?.showLoginScreen()
     }
 
-    private fun render(state: State) {
+    private fun render(state: State, currentFamilyName: Box<String>) {
 
         if (state.spinnerConfigure) {
-            configureSpinner(state.familyList)
+            configureSpinner(state.familyList, currentFamilyName)
             profileViewModel.onEvent(Event.SpinnerConfigured)
         }
 
@@ -70,10 +69,8 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun configureSpinner(families: List<String>) {
-        val familyAdapter = ArrayAdapter(
     private fun configureSpinner(families: List<String>, currentFamilyName: Box<String>) {
-        val familyAdapter = ArrayAdapter<String>(
+        val familyAdapter = ArrayAdapter(
             requireContext(),
             R.layout.custom_spinner,
             families
