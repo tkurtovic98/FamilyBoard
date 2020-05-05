@@ -86,15 +86,15 @@
         <item name="android:layout_height">@dimen/profile_progress_bar_size</item>
         <item name="android:indeterminate">false</item>
         <item name="android:max">100</item>
-        <item name="android:progress">10</item>
         <item name="android:progressDrawable">@drawable/circular_progress_bar</item>
         <item name="android:background">@drawable/progress_circle_shape</item>
         <item name="android:translationZ">4dp</item>
     </style>
 
     <style name="CustomSpinnerStyle" parent="@style/Widget.AppCompat.Spinner">
-        <item name="overlapAnchor">true</item>
         <item name="android:background">@drawable/custom_spinner_background</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

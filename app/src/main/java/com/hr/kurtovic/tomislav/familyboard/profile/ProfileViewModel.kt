@@ -5,38 +5,79 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
-import io.reactivex.disposables.CompositeDisposable
+import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
+
+
+data class State(
+    val familyList: List<String> = emptyList(),
+    val currentMember: FamilyMember? = null,
+    val spinnerConfigure: Boolean = false,
+    val profileImageLoad: Boolean = false
+)
+
+sealed class Event {
+    data class FamilyListChange(val familyList: List<String>) : Event()
+    data class CurrentMemberChange(val currentMember: FamilyMember?) : Event()
+    object SpinnerConfigured : Event()
+    object FirstTimeLoaded : Event()
+}
+
+
+fun reduce(event: Event, state: State): State =
+        when (event) {
+            is Event.FamilyListChange -> state.copy(
+                familyList = event.familyList,
+                spinnerConfigure = true
+            )
+            is Event.CurrentMemberChange -> state.copy(
+                currentMember = event.currentMember,
+                profileImageLoad = true
+            )
+            Event.SpinnerConfigured -> state.copy(spinnerConfigure = false)
+            Event.FirstTimeLoaded -> state.copy(profileImageLoad = false)
+        }
+
 
 class ProfileViewModel(
     private val familyMemberService: FamilyMemberService,
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val memberService: FamilyMemberService
 ) : ViewModel() {
 
-    private val internalFamilyChange = MutableLiveData<List<String>>().apply { value = emptyList() }
+    private val internalState = MutableLiveData<State>().apply { value = State() }
 
-    val familyChange: LiveData<List<String>> = internalFamilyChange
+    val state: LiveData<State> = internalState
 
-    val compositeDisposable = CompositeDisposable()
+    init {
+        familyMemberService.families()
+                .addSnapshotListener { querySnapshot, _ ->
+                    val families = arrayListOf<String>()
+                    for (documentSnapshot in querySnapshot!!.documents) {
+                        val familyName = documentSnapshot.get("familyName").toString()
+                        families.add(familyName)
+                    }
 
-    private val familyChangeListener = familyMemberService.families()
-            .addSnapshotListener { querySnapshot, _ ->
-                val families = arrayListOf<String>()
-                for (documentSnapshot in querySnapshot!!.documents) {
-                    val familyName = documentSnapshot.get("familyName").toString()
-                    families.add(familyName)
+                    onEvent(Event.FamilyListChange(families))
                 }
 
-                internalFamilyChange.postValue(families)
-            }
+        //TODO(fix interfering events on data load)
+//        memberService.currentMemberRef().addSnapshotListener { documentSnapshot, _ ->
+//            val familyMember = documentSnapshot?.toObject(FamilyMember::class.java)
+//            onEvent(Event.CurrentMemberChange(currentMember = familyMember))
+//        }
+
+    }
+
+
+    fun onEvent(event: Event) {
+        val currentState = internalState.value!!
+        val newState = reduce(event, currentState)
+        internalState.postValue(newState)
+    }
 
     fun logout() {
-        familyChangeListener.remove()
         authService.logout()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        familyChangeListener.remove()
-    }
 
 }

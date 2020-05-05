@@ -62,5 +62,5 @@ val familyList = module {
 }
 
 val profileFragment = module {
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get()) }
 }
