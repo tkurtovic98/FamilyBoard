@@ -4,22 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
 import com.hr.kurtovic.tomislav.familyboard.models.Message
-import io.reactivex.disposables.CompositeDisposable
 
 data class State(
     val whatInput: String = "",
     val whoInput: String = "",
     val untilWhenInput: String = "",
-    val postingInProgress: Boolean = false,
-    val familyName: String = ""
+    val postingInProgress: Boolean = false
 )
 
 sealed class Event {
     data class WhatInputChange(val whatInput: String) : Event()
     data class WhoInputChange(val whoInput: String) : Event()
     data class UntilWhenInputChange(val untilWhenInput: String) : Event()
-    data class Submit(val familyName: String) : Event()
+    object Submit : Event()
     object Submitted : Event()
 }
 
@@ -31,8 +30,7 @@ fun reduce(state: State, event: Event): State =
                 whoInput = "",
                 untilWhenInput = ""
             )
-            is Event.Submit -> state.copy(
-                familyName = event.familyName,
+            Event.Submit -> state.copy(
                 postingInProgress = true
             )
             is Event.WhatInputChange -> state.copy(whatInput = event.whatInput)
@@ -42,14 +40,12 @@ fun reduce(state: State, event: Event): State =
 
 
 class PetsViewModel(
-    private val petsService: PetsService,
+    private val familyMessageService: FamilyMessageService,
     private val familyMemberService: FamilyMemberService
 ) :
     ViewModel() {
 
     private val internalState = MutableLiveData<State>().apply { value = State() }
-
-    private val compositeDisposable = CompositeDisposable()
 
     val state: LiveData<State> = internalState
 
@@ -64,23 +60,19 @@ class PetsViewModel(
 
     }
 
-    private fun postMessage(input: State) {
+    private fun postMessage(state: State) {
         //todo check if who exists in room
         //todo check if when is valid time
         val message = Message(
             content = mapOf(
-                "who" to input.whoInput,
-                "what" to input.whatInput,
-                "until" to input.untilWhenInput
+                "who" to state.whoInput,
+                "what" to state.whatInput,
+                "until" to state.untilWhenInput
             ),
-            memberSenderRef = familyMemberService.currentMemberRef()
+            memberSenderRef = familyMemberService.currentMemberRef(),
+            category = "pets"
         )
-        petsService.postPetMessage(message, input.familyName)
+        familyMessageService.postMessage(message)
         onEvent(Event.Submitted)
-    }
-
-    override fun onCleared() {
-        compositeDisposable.clear()
-        super.onCleared()
     }
 }

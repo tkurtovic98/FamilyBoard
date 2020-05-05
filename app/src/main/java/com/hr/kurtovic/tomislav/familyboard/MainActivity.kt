@@ -7,8 +7,11 @@ import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.MessageInputFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val sharedViewModel: SharedViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

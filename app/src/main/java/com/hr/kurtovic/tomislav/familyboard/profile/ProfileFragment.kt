@@ -8,19 +8,23 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
+import com.hr.kurtovic.tomislav.familyboard.SharedViewModel
+import com.hr.kurtovic.tomislav.familyboard.util.Box
 import kotlinx.android.synthetic.main.profile_fragment.*
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModel()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
+
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -35,6 +39,10 @@ class ProfileFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         profileViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
+        val currentFamilyName = Box(sharedViewModel.sharedFamilyName.value)
+        profileViewModel.familyChange.observe(
+            viewLifecycleOwner,
+            Observer { configureSpinner(it, currentFamilyName) })
         profile_logout_button.setOnClickListener { logout() }
     }
 
@@ -64,6 +72,8 @@ class ProfileFragment : Fragment() {
 
     private fun configureSpinner(families: List<String>) {
         val familyAdapter = ArrayAdapter(
+    private fun configureSpinner(families: List<String>, currentFamilyName: Box<String>) {
+        val familyAdapter = ArrayAdapter<String>(
             requireContext(),
             R.layout.custom_spinner,
             families
@@ -73,6 +83,7 @@ class ProfileFragment : Fragment() {
 
         profile_family_spinner.apply {
             adapter = familyAdapter
+
             onItemSelectedListener = (object : OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
@@ -83,9 +94,21 @@ class ProfileFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    val familyName = adapter.getItem(position).toString()
-                    Toast.makeText(requireContext(), "$familyName selected!", Toast.LENGTH_LONG)
-                            .show()
+                    changeCurrentFamilyName(currentFamilyName, adapter.getItem(position).toString())
+                }
+
+                private fun changeCurrentFamilyName(
+                    currentFamilyName: Box<String>,
+                    familyFromAdapter: String
+                ) {
+                    if (currentFamilyName.content != null) {
+                        currentFamilyName.take {
+                            setSelection(familyAdapter.getPosition(it))
+                        }
+                    } else {
+                        sharedViewModel.changeFamilyName(familyFromAdapter)
+                    }
+
                 }
 
             })

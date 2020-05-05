@@ -42,22 +42,22 @@ class ProfileViewModel(
     private val familyMemberService: FamilyMemberService,
     private val authService: AuthService,
     private val memberService: FamilyMemberService
+
+class ProfileViewModel(
+    familyMemberService: FamilyMemberService,
+    private val authService: AuthService
 ) : ViewModel() {
 
     private val internalState = MutableLiveData<State>().apply { value = State() }
 
     val state: LiveData<State> = internalState
 
-    init {
-        familyMemberService.families()
-                .addSnapshotListener { querySnapshot, _ ->
-                    val families = arrayListOf<String>()
-                    for (documentSnapshot in querySnapshot!!.documents) {
-                        val familyName = documentSnapshot.get("familyName").toString()
-                        families.add(familyName)
-                    }
-
-                    onEvent(Event.FamilyListChange(families))
+    private val familyChangeListener = familyMemberService.families()
+            .addSnapshotListener { querySnapshot, _ ->
+                val families = arrayListOf<String>()
+                for (documentSnapshot in querySnapshot!!.documents) {
+                    val familyName = documentSnapshot.get("familyName").toString()
+                    families.add(familyName)
                 }
 
         //TODO(fix interfering events on data load)
