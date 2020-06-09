@@ -59,7 +59,8 @@ class MessageInputFragment : Fragment() {
 
     private fun replaceFragment(fragment: Fragment) {
         val tag = fragment::class.java.simpleName
-        fragmentManager?.commit {
+        fragment.arguments = arguments
+        requireActivity().supportFragmentManager.commit {
             replace(R.id.message_input_container, fragment, tag)
         }
     }

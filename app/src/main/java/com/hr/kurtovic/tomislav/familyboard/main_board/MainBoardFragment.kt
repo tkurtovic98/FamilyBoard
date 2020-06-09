@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,10 +13,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
+import com.hr.kurtovic.tomislav.familyboard.SharedViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MainBoardMessageAdapter
 import kotlinx.android.synthetic.main.fragment_main_board.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
@@ -25,12 +26,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
  */
 class MainBoardFragment : Fragment() {
 
+    private val messageService: FamilyMessageService by inject()
+    private val mainBoardViewModel: MainBoardViewModel by viewModel()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
+
     companion object {
         fun newInstance() = MainBoardFragment()
     }
-
-    private val messageService: FamilyMessageService by inject()
-    private val mainBoardViewModel: MainBoardViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?
@@ -42,19 +44,19 @@ class MainBoardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedViewModel.sharedFamilyName.observe(
+            viewLifecycleOwner,
+            Observer { mainBoardViewModel.onEvent(Event.FamilyNameChange) })
+        mainBoardViewModel.state.observe(viewLifecycleOwner, Observer { render(it) })
+
         main_board_input_add.setOnClickListener { openInputFragment() }
-        mainBoardViewModel.board.observe(viewLifecycleOwner, Observer { render(it) })
     }
 
-    private fun render(board: Board) {
-        main_board_fragment_empty_message_tv.isVisible = board.isEmpty
+    private fun render(state: State) {
+        main_board_fragment_empty_message_tv.visibility = if (state.isEmpty) View.VISIBLE else View.GONE
 
-        if (board.currentFamilyName.isEmpty()) {
-            return
-        }
-
-        if (board.familyNameIsChanging) {
-            this.configureRecyclerView(board.currentFamilyName)
+        if (state.familyNameIsChanging) {
+            this.configureRecyclerView()
             mainBoardViewModel.onEvent(Event.NewFamilyBoardLoaded)
         }
     }
@@ -64,21 +66,22 @@ class MainBoardFragment : Fragment() {
     }
 
 
-    private fun configureRecyclerView(name: String) {
+    private fun configureRecyclerView() {
         //Configure Adapter & RecyclerView
         val mainBoardMessageAdapter = MainBoardMessageAdapter(
-            generateOptionsForAdapter(messageService.messages(familyName = name)),
+            generateOptionsForAdapter(messageService.messages()),
             FirebaseAuth.getInstance().currentUser!!.uid
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
             object : RecyclerView.AdapterDataObserver() {
-                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
-                    super.onItemRangeChanged(positionStart, itemCount)
+                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                    super.onItemRangeRemoved(positionStart, itemCount)
                     mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
                 }
 
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     main_board_recyclerview.smoothScrollToPosition(itemCount)
+                    mainBoardViewModel.onEvent(Event.BoardDataChange(itemCount == 0))
                 }
             }
         )

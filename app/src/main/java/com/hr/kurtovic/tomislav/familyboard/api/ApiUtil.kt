@@ -11,10 +11,16 @@ class ApiUtil {
         const val FAMILIES_COLLECTION = "Families"
         const val MEMBERS_COLLECTION = "Members"
         const val MESSAGES_COLLECTION = "Messages"
+        private const val VERSIONS = "Versions"
+        private const val DB_VERSION = "v1"
 
-        fun collection(name: String): CollectionReference = FirebaseFirestore.getInstance().collection(
-            name
-        )
+        fun rootCollection(name: String): CollectionReference = FirebaseFirestore.getInstance()
+                .collection(VERSIONS)
+                .document(
+                    DB_VERSION
+                ).collection(
+                    name
+                )
     }
 
 

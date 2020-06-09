@@ -7,8 +7,11 @@ import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.MessageInputFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
+
+    private val sharedViewModel: SharedViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +35,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showMessageInputScreen() {
-        replaceFragment(MessageInputFragment.newInstance())
+        replaceFragment(MessageInputFragment.newInstance(), addToBackStack = true)
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    private fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = false) {
         val tag = fragment::class.java.simpleName
+        val currentFragment = supportFragmentManager.findFragmentByTag(tag)
+        if (currentFragment?.isVisible == true) {
+            return;
+        }
         supportFragmentManager.commit {
+            if (addToBackStack) {
+                addToBackStack(tag)
+            }
             replace(R.id.fragmentContainer, fragment, tag)
         }
     }

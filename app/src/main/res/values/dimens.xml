@@ -29,6 +29,9 @@
 
     <dimen name="recycler_view_stroke_width_default">2dp</dimen>
     <dimen name="corner_size_small">4dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_large">32dp</dimen>
     <dimen name="default_padding">16dp</dimen>
     <dimen name="padding_small">8dp</dimen>
 
@@ -39,7 +42,13 @@
     <dimen name="main_chat_add_button_width">300dp</dimen>
     <dimen name="bottom_navigation_icon_size">48dp</dimen>
     <dimen name="input_radio_button_height">64dp</dimen>
-    <dimen name="input_radio_button_width">64dp</dimen>
+    <dimen name="input_radio_button_width">48dp</dimen>
+    <dimen name="profile_profile_image_height">128dp</dimen>
+    <dimen name="profile_profile_image_width">128dp</dimen>
+    <dimen name="profile_guideline_begin">128dp</dimen>
+    <dimen name="profile_progress_bar_size">100dp</dimen>
+    <dimen name="progress_bar_thickness">16dp</dimen>
+    <dimen name="divider_width">80dp</dimen>
 
 
 </resources>
