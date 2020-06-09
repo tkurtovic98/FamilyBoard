@@ -38,10 +38,10 @@ class ProfileFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val currentFamilyName = Box(sharedViewModel.sharedFamilyName.value)
+        profileViewModel.onEvent(Event.FamilyNameChange(familyName = sharedViewModel.sharedFamilyName.value!!))
         profileViewModel.state.observe(
             viewLifecycleOwner,
-            Observer { render(it, currentFamilyName) })
+            Observer { render(it) })
         profile_logout_button.setOnClickListener { logout() }
     }
 
@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
         } else View.GONE
 
         if (state.spinnerConfigure) {
-            configureSpinner(state.familyList, currentFamilyName)
+            configureSpinner(state.familyList, state.currentFamilyName)
             profileViewModel.onEvent(Event.SpinnerConfigured)
         }
 
@@ -75,7 +75,7 @@ class ProfileFragment : Fragment() {
     }
 
 
-    private fun configureSpinner(families: List<String>, currentFamilyName: Box<String>) {
+    private fun configureSpinner(families: List<String>, familyName: Box<String>) {
         val familyAdapter = ArrayAdapter(
             requireContext(),
             R.layout.custom_spinner,
@@ -97,16 +97,17 @@ class ProfileFragment : Fragment() {
                     position: Int,
                     id: Long
                 ) {
-                    changeCurrentFamilyName(currentFamilyName, adapter.getItem(position).toString())
+                    changeCurrentFamilyName(adapter.getItem(position).toString())
                 }
 
                 private fun changeCurrentFamilyName(
-                    currentFamilyName: Box<String>,
                     familyFromAdapter: String
                 ) {
-                    if (currentFamilyName.content != null) {
-                        currentFamilyName.take {
-                            setSelection(familyAdapter.getPosition(it))
+                    if (familyName.content != null) {
+                        familyName.take {
+                            if (it != familyFromAdapter){
+                                setSelection(familyAdapter.getPosition(it))
+                            }
                         }
                     } else {
                         sharedViewModel.changeFamilyName(familyFromAdapter)

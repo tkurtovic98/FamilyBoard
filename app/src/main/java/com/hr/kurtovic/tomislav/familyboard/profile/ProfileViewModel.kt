@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
+import com.hr.kurtovic.tomislav.familyboard.util.Box
 
 
 data class State(
@@ -13,12 +14,14 @@ data class State(
     val currentMember: FamilyMember? = null,
     val spinnerConfigure: Boolean = false,
     val loading: Boolean = true,
-    val firstTimeLoading: Boolean = true
+    val firstTimeLoading: Boolean = true,
+    val currentFamilyName: Box<String> = Box()
 )
 
 sealed class Event {
     data class FamilyListChange(val familyList: List<String>) : Event()
     data class CurrentMemberChange(val currentMember: FamilyMember?) : Event()
+    data class FamilyNameChange(val familyName: String): Event()
     object SpinnerConfigured : Event()
     object FirstTimeLoaded : Event()
 }
@@ -34,8 +37,9 @@ fun reduce(event: Event, state: State): State =
                 currentMember = event.currentMember,
                 loading = false
             )
-            Event.SpinnerConfigured -> state.copy(spinnerConfigure = false)
+            is Event.FamilyNameChange -> state.copy(currentFamilyName= Box(event.familyName) )
             Event.FirstTimeLoaded -> state.copy(firstTimeLoading = false)
+            Event.SpinnerConfigured -> state.copy(spinnerConfigure = false)
         }
 
 
