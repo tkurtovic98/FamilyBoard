@@ -12,7 +12,8 @@ data class State(
     val familyList: List<String> = emptyList(),
     val currentMember: FamilyMember? = null,
     val spinnerConfigure: Boolean = false,
-    val profileImageLoad: Boolean = false
+    val loading: Boolean = true,
+    val firstTimeLoading: Boolean = true
 )
 
 sealed class Event {
@@ -31,10 +32,10 @@ fun reduce(event: Event, state: State): State =
             )
             is Event.CurrentMemberChange -> state.copy(
                 currentMember = event.currentMember,
-                profileImageLoad = true
+                loading = false
             )
             Event.SpinnerConfigured -> state.copy(spinnerConfigure = false)
-            Event.FirstTimeLoaded -> state.copy(profileImageLoad = false)
+            Event.FirstTimeLoaded -> state.copy(firstTimeLoading = false)
         }
 
 
@@ -49,21 +50,23 @@ class ProfileViewModel(
     val state: LiveData<State> = internalState
 
     init {
-        familyMemberService.families()
-                .addSnapshotListener { querySnapshot, _ ->
-                    val families = arrayListOf<String>()
-                    for (documentSnapshot in querySnapshot!!.documents) {
-                        val familyName = documentSnapshot.get("familyName").toString()
-                        families.add(familyName)
-                    }
-                    onEvent(Event.FamilyListChange(familyList = families))
-                }
+        memberService.currentMemberRef().get().addOnSuccessListener { documentSnapshot ->
+            val familyMember = documentSnapshot?.toObject(FamilyMember::class.java)
+            onEvent(Event.CurrentMemberChange(currentMember = familyMember))
+            familyMemberService.families()
+                    .addSnapshotListener { querySnapshot, _ ->
+                        val families = arrayListOf<String>()
+                        for (ds in querySnapshot!!.documents) {
+                            val familyName = ds.get("familyName").toString()
+                            families.add(familyName)
+                        }
 
-        //TODO(fix interfering events on data load)
-//        memberService.currentMemberRef().addSnapshotListener { documentSnapshot, _ ->
-//            val familyMember = documentSnapshot?.toObject(FamilyMember::class.java)
-//            onEvent(Event.CurrentMemberChange(currentMember = familyMember))
-//
+                        onEvent(Event.FamilyListChange(families))
+                    }
+
+        }.addOnFailureListener {
+            //TODO add failure handling
+        }
     }
 
     fun onEvent(event: Event) {
