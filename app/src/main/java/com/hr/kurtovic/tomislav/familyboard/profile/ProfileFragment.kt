@@ -44,18 +44,24 @@ class ProfileFragment : Fragment() {
     }
 
     private fun render(state: State) {
+        profile_progress_bar.visibility = if (state.loading) {
+            View.VISIBLE
+            return
+        } else View.GONE
 
         if (state.spinnerConfigure) {
             configureSpinner(state.familyList)
             profileViewModel.onEvent(Event.SpinnerConfigured)
         }
 
-        if (state.profileImageLoad) {
+        if (state.firstTimeLoading) {
             state.currentMember?.apply {
                 Glide.with(requireContext())
                         .load(this.urlPicture)
                         .circleCrop()
                         .into(profile_profile_image)
+
+                profile_member_name.text = this.name
             }
             profileViewModel.onEvent(Event.FirstTimeLoaded)
         }
