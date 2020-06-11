@@ -4,81 +4,75 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
+import com.hr.kurtovic.tomislav.familyboard.api.FamilyMessageService
 import com.hr.kurtovic.tomislav.familyboard.models.Message
-import io.reactivex.disposables.CompositeDisposable
 
-data class Input(
+data class State(
     val whatInput: String = "",
     val whoInput: String = "",
     val untilWhenInput: String = "",
-    val postingInProgress: Boolean = false,
-    val familyName: String = ""
+    val postingInProgress: Boolean = false
 )
 
 sealed class Event {
     data class WhatInputChange(val whatInput: String) : Event()
     data class WhoInputChange(val whoInput: String) : Event()
     data class UntilWhenInputChange(val untilWhenInput: String) : Event()
-    data class Submit(val familyName: String) : Event()
+    object Submit : Event()
     object Submitted : Event()
 }
 
-fun reduce(input: Input, event: Event): Input =
+fun reduce(state: State, event: Event): State =
         when (event) {
-            Event.Submitted -> input.copy(postingInProgress = false)
-            is Event.Submit -> input.copy(
-                familyName = event.familyName,
-                postingInProgress = true,
+            Event.Submitted -> state.copy(
+                postingInProgress = false,
                 whatInput = "",
                 whoInput = "",
                 untilWhenInput = ""
             )
-            is Event.WhatInputChange -> input.copy(whatInput = event.whatInput)
-            is Event.WhoInputChange -> input.copy(whoInput = event.whoInput)
-            is Event.UntilWhenInputChange -> input.copy(untilWhenInput = event.untilWhenInput)
+            Event.Submit -> state.copy(
+                postingInProgress = true
+            )
+            is Event.WhatInputChange -> state.copy(whatInput = event.whatInput)
+            is Event.WhoInputChange -> state.copy(whoInput = event.whoInput)
+            is Event.UntilWhenInputChange -> state.copy(untilWhenInput = event.untilWhenInput)
         }
 
 
 class PetsViewModel(
-    private val petsService: PetsService,
+    private val familyMessageService: FamilyMessageService,
     private val familyMemberService: FamilyMemberService
 ) :
     ViewModel() {
 
-    private val internalInput = MutableLiveData<Input>().apply { value = Input() }
+    private val internalState = MutableLiveData<State>().apply { value = State() }
 
-    private val compositeDisposable = CompositeDisposable()
-
-    val input: LiveData<Input> = internalInput
+    val state: LiveData<State> = internalState
 
     fun onEvent(event: Event) {
-        val currentInput = internalInput.value!!
-        val newInput = reduce(currentInput, event)
-        internalInput.postValue(newInput)
+        val currentState = internalState.value!!
+        val newState = reduce(currentState, event)
+        internalState.postValue(newState)
 
-        if (newInput.postingInProgress) {
-            postMessage(newInput)
+        if (newState.postingInProgress) {
+            postMessage(newState)
         }
 
     }
 
-    private fun postMessage(input: Input) {
+    private fun postMessage(state: State) {
         //todo check if who exists in room
         //todo check if when is valid time
         val message = Message(
             content = mapOf(
-                "who" to input.whoInput,
-                "what" to input.whatInput,
-                "until" to input.untilWhenInput
+                "who" to state.whoInput,
+                "what" to state.whatInput,
+                "until" to state.untilWhenInput
             ),
-            memberSenderRef = familyMemberService.currentMemberRef()
+            memberSenderRef = familyMemberService.currentMemberRef(),
+            category = "pets"
         )
-        petsService.postPetMessage(message, input.familyName)
+        familyMessageService.postMessage(message)
         onEvent(Event.Submitted)
-    }
-
-    override fun onCleared() {
-        compositeDisposable.clear()
-        super.onCleared()
     }
 }

@@ -2,18 +2,23 @@ package com.hr.kurtovic.tomislav.familyboard.api
 
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.ktx.toObject
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
+import kotlinx.coroutines.tasks.await
 
 
 interface FamilyMemberService {
     fun currentMemberRef(): DocumentReference
+    suspend fun currentMember(): FamilyMember?
     fun createMember(uid: String, memberName: String, urlPicture: String): Task<Void>
     fun getMember(uid: String): Task<DocumentSnapshot>
     fun updateMemberName(memberName: String, uid: String, field: String): Task<Void>
     fun deleteMember(uid: String): Task<Void>
     fun addFamily(uid: String, familyName: String): Task<Void>
+    fun families(): CollectionReference
     val currentMemberId: String
 }
 
@@ -27,6 +32,11 @@ class FamilyMemberServiceImpl : FamilyMemberService {
 
     override fun currentMemberRef(): DocumentReference = ApiUtil.rootCollection(membersCollection)
             .document(currentMemberId)
+
+    override suspend fun currentMember(): FamilyMember? {
+        val snapshot = this.currentMemberRef().get().await()
+        return snapshot.toObject<FamilyMember>()
+    }
 
 
     // CREATE
@@ -54,5 +64,9 @@ class FamilyMemberServiceImpl : FamilyMemberService {
             ApiUtil.rootCollection(membersCollection).document(uid)
                     .collection(ApiUtil.FAMILIES_COLLECTION)
                     .document(familyName).set(mapOf("familyName" to familyName))
+
+    override fun families(): CollectionReference = ApiUtil.rootCollection(membersCollection)
+            .document(currentMemberId).collection(ApiUtil.FAMILIES_COLLECTION)
+
 
 }

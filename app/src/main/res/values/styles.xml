@@ -1,12 +1,12 @@
 <resources>
 
-    <!-- LOGIN -->
+    <!-- Login -->
     <style name="TextAppearance.AppTheme.Title" parent="TextAppearance.MaterialComponents.Headline2">
         <item name="android:textColor">@color/white</item>
         <item name="fontFamily">@font/roboto_bold</item>
     </style>
 
-    <!-- BUTTONS -->
+    <!-- Buttons -->
     <style name="DefaultButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="shapeAppearanceOverlay">@style/ButtonAppearance</item>
     </style>
@@ -21,7 +21,7 @@
         <item name="cornerSize">@dimen/default_radius</item>
     </style>
 
-    <!-- TEXT -->
+    <!-- Text -->
     <style name="DefaultTextStyle">
         <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textSize">@dimen/default_text_size</item>
@@ -69,9 +69,32 @@
         <item name="android:layout_margin">@dimen/margin_small</item>
     </style>
 
-    <style name="ProfilePage">
-        <item name="android:background">@drawable/profile_page_background</item>
-        <item name="android:layout_margin">@dimen/default_margin</item>
+    <!--Profile page -->
+
+    <style name="ProfileTextViewStyle">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/margin_small</item>
+        <item name="android:layout_marginEnd">@dimen/margin_small</item>
+        <item name="android:padding">@dimen/padding_small</item>
+        <item name="android:background">@drawable/rounded_background_white</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+
+    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_width">@dimen/profile_progress_bar_size</item>
+        <item name="android:layout_height">@dimen/profile_progress_bar_size</item>
+        <item name="android:indeterminate">false</item>
+        <item name="android:max">100</item>
+        <item name="android:progressDrawable">@drawable/circular_progress_bar</item>
+        <item name="android:background">@drawable/progress_circle_shape</item>
+        <item name="android:translationZ">4dp</item>
+    </style>
+
+    <style name="CustomSpinnerStyle" parent="@style/Widget.AppCompat.Spinner">
+        <item name="android:background">@drawable/custom_spinner_background</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
 </resources>

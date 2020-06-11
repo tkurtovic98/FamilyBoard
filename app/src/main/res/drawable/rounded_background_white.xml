@@ -7,6 +7,4 @@
         android:color="@color/grey"
         android:dashWidth="2dp" />
     <corners android:radius="@dimen/default_radius" />
-
-
 </shape>
