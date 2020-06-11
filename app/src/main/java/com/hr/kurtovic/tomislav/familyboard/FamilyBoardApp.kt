@@ -49,7 +49,7 @@ val pets = module {
 }
 
 val mainBoard = module {
-    viewModel { MainBoardViewModel() }
+    viewModel { MainBoardViewModel(get(), get()) }
 }
 
 val familyList = module {

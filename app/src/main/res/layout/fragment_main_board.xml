@@ -2,61 +2,70 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentHolder">
 
-    <!-- RECYCLER VIEW CONTAINER -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_board_fragment_recyclerview_container"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/family_list_add_family_container"
-        app:layout_constraintTop_toTopOf="parent"
-        >
+        android:layout_height="match_parent">
 
-        <!-- MESSAGE RECYCLER VIEW EMPTY -->
-        <TextView
-            android:id="@+id/main_board_fragment_empty_message_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Hello "
-            android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/main_board_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="-16dp" />
-
+        <include
+            android:id="@+id/main_board_progress_bar"
+            layout="@layout/progress_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- ADD MESSAGE CONTAINER -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/family_list_add_family_container"
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_board_fragment_recyclerview_container">
+        android:layout_height="match_parent">
+        <!-- RECYCLER VIEW CONTAINER -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_board_fragment_recyclerview_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/family_list_add_family_container">
 
-        <!-- ADD MESSAGE BUTTON -->
-        <ImageButton
-            android:id="@+id/main_board_input_add"
-            android:layout_width="@dimen/main_chat_add_button_width"
+            <!-- MESSAGE RECYCLER VIEW EMPTY -->
+            <TextView
+                android:id="@+id/main_board_fragment_empty_message_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Hello "
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/main_board_recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteX="0dp"
+                tools:layout_editor_absoluteY="-16dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- ADD MESSAGE CONTAINER -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/family_list_add_family_container"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_add"
-            android:backgroundTint="@color/colorPrimary"
+            android:layout_margin="@dimen/default_margin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+            <!-- ADD MESSAGE BUTTON -->
+            <ImageButton
+                android:id="@+id/main_board_input_add"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
