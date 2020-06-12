@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -78,6 +79,15 @@ class FamilyListFragment : Fragment() {
     }
 
     private fun render(state: State) {
+        if (state.loading) {
+            family_list_layout.isVisible = false
+            family_list_progress_bar.isVisible = true
+            return
+        } else {
+            family_list_progress_bar.isVisible = false
+            family_list_layout.isVisible = true
+        }
+
         family_list_no_families_text.visibility = if (state.isEmpty) View.VISIBLE else View.GONE
 
         if (state.familyAddInProgress) {
@@ -117,6 +127,7 @@ class FamilyListFragment : Fragment() {
             adapter = familyListAdapter
         }
 
+        familyListViewModel.onEvent(Event.RecyclerViewConfigured)
     }
 
     private fun familyListItemListener(): FamilyListItemListener =

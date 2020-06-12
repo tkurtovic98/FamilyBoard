@@ -17,7 +17,8 @@ data class State(
     val isEmpty: Boolean = true,
     val familyAddInProgress: Boolean = false,
     val memberToFamilyAddInProgress: Boolean = false,
-    val successMessage: String = ""
+    val successMessage: String = "",
+    val loading: Boolean = true
 )
 
 
@@ -31,6 +32,7 @@ sealed class Event {
 
     data class ListDataChanged(val isEmpty: Boolean) : Event()
     data class ErrorEvent(val error: Error) : Event()
+    object RecyclerViewConfigured : Event()
 }
 
 sealed class Error {
@@ -64,6 +66,7 @@ sealed class Error {
 fun reduce(currentState: State, event: Event): State =
         when (event) {
             Event.FamilyAdd -> currentState.copy(familyAddInProgress = true)
+            Event.RecyclerViewConfigured -> currentState.copy(loading = false)
             is Event.FamilyAdded -> currentState.copy(
                 familyName = "",
                 familyAddInProgress = false
