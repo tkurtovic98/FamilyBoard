@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <ImageView
-        android:id="@+id/main_board_message_image"
+        android:id="@+id/main_board_message_profile_image"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="center"

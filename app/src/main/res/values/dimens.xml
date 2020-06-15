@@ -50,5 +50,10 @@
     <dimen name="progress_bar_thickness">16dp</dimen>
     <dimen name="divider_width">80dp</dimen>
 
+    <!-- Message Card -->
+    <dimen name="message_card_profile_image_size">48dp</dimen>
+    <dimen name="message_card_category_image_size">24dp</dimen>
+    <dimen name="message_card_menu_size">24dp</dimen>
+
 
 </resources>
