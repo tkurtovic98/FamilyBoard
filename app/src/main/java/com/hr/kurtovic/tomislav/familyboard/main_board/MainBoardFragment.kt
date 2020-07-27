@@ -10,12 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MainBoardMessageAdapter
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MenuItemClickListener
+import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.PopupMenuItem
 import com.hr.kurtovic.tomislav.familyboard.models.Message
 import kotlinx.android.synthetic.main.fragment_main_board.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -105,7 +105,13 @@ class MainBoardFragment : Fragment(), MenuItemClickListener {
             .setLifecycleOwner(this)
             .build()
 
-    override fun onMenuItemClick(message: Message, accepted: Boolean) {
-        Snackbar.make(requireView(), message.category!!, Snackbar.LENGTH_LONG).show()
+    override fun onMenuItemClick(message: Message, menuItem: PopupMenuItem) {
+        when (menuItem) {
+            PopupMenuItem.ACCEPTED -> mainBoardViewModel.setMessageAccepted(message.id!!)
+            PopupMenuItem.SHOW -> (activity as MainActivity).showMessageDisplay(messageId = message.id!!)
+            PopupMenuItem.DELETE -> mainBoardViewModel.deleteMessage(messageId = message.id!!)
+        }
     }
+
+
 }

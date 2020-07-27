@@ -8,7 +8,7 @@ import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.models.Message
 
 interface MenuItemClickListener {
-    fun onMenuItemClick(message: Message, accepted: Boolean)
+    fun onMenuItemClick(message: Message, menuItem: PopupMenuItem)
 }
 
 

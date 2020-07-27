@@ -12,5 +12,7 @@ data class Message(
     @get:ServerTimestamp
     var dateCreated: Date? = null,
     var memberSenderRef: DocumentReference? = null,
-    var content: Map<String, String>? = null
+    var content: Map<String, String>? = null,
+    var accepted: Boolean = false,
+    var memberWhoAcceptedId: String? = null
 )

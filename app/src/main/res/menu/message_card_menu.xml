@@ -9,4 +9,8 @@
         android:id="@+id/message_card_accept"
         android:title="Accept" />
 
+    <item
+        android:id="@+id/message_card_delete"
+        android:title="Delete" />
+
 </menu>

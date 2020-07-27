@@ -15,6 +15,12 @@ import kotlinx.android.synthetic.main.main_board_message_card.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+enum class PopupMenuItem {
+    ACCEPTED,
+    SHOW,
+    DELETE
+}
+
 
 class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -30,6 +36,9 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         position: Int,
         menuItemClickListener: MenuItemClickListener
     ) {
+
+        var canDelete = false
+
         message.memberSenderRef?.get()?.addOnSuccessListener {
             val memberSender = it.toObject<FamilyMember>()
 
@@ -40,6 +49,8 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                         .apply(RequestOptions.circleCropTransform())
                         .into(itemView.main_board_message_profile_image)
             }
+
+            canDelete = memberSender?.uid == currentUserId
         }
 
         Glide.with(itemView.main_board_message_category.context)
@@ -47,27 +58,47 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 .apply(RequestOptions.circleCropTransform())
                 .into(itemView.main_board_message_category)
 
+        if (message.accepted) {
+            Glide.with(itemView.main_board_message_accepted.context)
+                    .load(itemView.resources.getDrawable(R.drawable.ic_check_24dp, null))
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(itemView.main_board_message_accepted)
+        }
+
         itemView.main_board_message_menu_button.setOnClickListener {
             popupMenu(
                 menuItemClickListener,
-                message
+                message,
+                canDelete
             )
         }
     }
 
-    private fun popupMenu(menuItemClickListener: MenuItemClickListener, message: Message) {
+    private fun popupMenu(
+        menuItemClickListener: MenuItemClickListener,
+        message: Message,
+        canDelete: Boolean
+    ) {
         val popup = PopupMenu(itemView.context, itemView.main_board_message_menu_button)
         //inflating menu from xml resource
         popup.inflate(R.menu.message_card_menu)
+
+        popup.menu.findItem(R.id.message_card_accept).isVisible = !message.accepted
+        popup.menu.findItem(R.id.message_card_delete).isVisible = canDelete
+
         //adding click listener
         popup.setOnMenuItemClickListener {
             when (it?.itemId) {
                 R.id.message_card_more_info -> {
-                    menuItemClickListener.onMenuItemClick(message, false)
+                    menuItemClickListener.onMenuItemClick(message, PopupMenuItem.SHOW)
                     true
                 }
                 R.id.message_card_accept -> {
-                    menuItemClickListener.onMenuItemClick(message, true)
+                    menuItemClickListener.onMenuItemClick(message, PopupMenuItem.ACCEPTED)
+                    true
+                }
+                R.id.message_card_delete -> {
+                    menuItemClickListener.onMenuItemClick(message, PopupMenuItem.DELETE)
                     true
                 }
                 else -> false

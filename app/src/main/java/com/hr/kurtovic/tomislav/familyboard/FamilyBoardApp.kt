@@ -8,6 +8,7 @@ import com.hr.kurtovic.tomislav.familyboard.auth.AuthViewModel
 import com.hr.kurtovic.tomislav.familyboard.family_list.FamilyListViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsViewModel
+import com.hr.kurtovic.tomislav.familyboard.main_board.message_display.MessageDisplayViewModel
 import com.hr.kurtovic.tomislav.familyboard.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -50,6 +51,7 @@ val pets = module {
 
 val mainBoard = module {
     viewModel { MainBoardViewModel(get(), get()) }
+    viewModel { (messageId: String) -> MessageDisplayViewModel(messageId, get(), get()) }
 }
 
 val familyList = module {

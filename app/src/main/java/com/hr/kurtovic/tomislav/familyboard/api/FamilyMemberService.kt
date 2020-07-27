@@ -4,7 +4,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.toObject
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 import kotlinx.coroutines.tasks.await
@@ -14,7 +13,7 @@ interface FamilyMemberService {
     fun currentMemberRef(): DocumentReference
     suspend fun currentMember(): FamilyMember?
     fun createMember(uid: String, memberName: String, urlPicture: String): Task<Void>
-    fun getMember(uid: String): Task<DocumentSnapshot>
+    suspend fun getMember(uid: String): FamilyMember?
     fun updateMemberName(memberName: String, uid: String, field: String): Task<Void>
     fun deleteMember(uid: String): Task<Void>
     fun addFamily(uid: String, familyName: String): Task<Void>
@@ -33,10 +32,8 @@ class FamilyMemberServiceImpl : FamilyMemberService {
     override fun currentMemberRef(): DocumentReference = ApiUtil.rootCollection(membersCollection)
             .document(currentMemberId)
 
-    override suspend fun currentMember(): FamilyMember? {
-        val snapshot = this.currentMemberRef().get().await()
-        return snapshot.toObject<FamilyMember>()
-    }
+    override suspend fun currentMember(): FamilyMember? =
+            this.currentMemberRef().get().await().toObject<FamilyMember>()
 
 
     // CREATE
@@ -46,8 +43,9 @@ class FamilyMemberServiceImpl : FamilyMemberService {
     }
 
     // GET
-    override fun getMember(uid: String): Task<DocumentSnapshot> =
-            ApiUtil.rootCollection(membersCollection).document(uid).get()
+    override suspend fun getMember(uid: String): FamilyMember? =
+            ApiUtil.rootCollection(membersCollection).document(uid).get().await()
+                    .toObject<FamilyMember>()
 
 
     // UPDATE
