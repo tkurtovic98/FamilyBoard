@@ -36,6 +36,7 @@ fun reduce(event: Event, state: State): State =
             Event.RecyclerViewConfigured -> state.copy(recycleViewConfigured = true)
         }
 
+
 class MainBoardViewModel(
     private val memberService: FamilyMemberService,
     private val messageService: FamilyMessageService
@@ -48,8 +49,8 @@ class MainBoardViewModel(
     init {
         viewModelScope.launch {
             try {
-                memberService.currentMember()?.let {
-                    onEvent(Event.FamilyMemberLoaded(it))
+                memberService.currentMember()?.apply {
+                    onEvent(Event.FamilyMemberLoaded(this))
                 }
             } catch (e: FirebaseFirestoreException) {
                 //TODO
@@ -60,10 +61,33 @@ class MainBoardViewModel(
 
     val state: LiveData<State> = internalState
 
+    fun setMessageAccepted(messageId: String) {
+        viewModelScope.launch {
+            try {
+                messageService.setMessageAccepted(
+                    messageId,
+                    internalState.value?.currentMember?.uid!!
+                )
+            } catch (e: FirebaseFirestoreException) {
+                //TODO
+            }
+        }
+    }
+
+    fun deleteMessage(messageId: String) {
+        viewModelScope.launch {
+            try {
+                messageService.deleteMessage(messageId)
+            } catch (e: FirebaseFirestoreException) {
+
+            }
+        }
+    }
+
     fun onEvent(event: Event) {
         val currentBoard = internalState.value!!
-        val newBoard = reduce(event, currentBoard)
-        internalState.postValue(newBoard)
+        val newState = reduce(event, currentBoard)
+        internalState.postValue(newState)
     }
 
 }

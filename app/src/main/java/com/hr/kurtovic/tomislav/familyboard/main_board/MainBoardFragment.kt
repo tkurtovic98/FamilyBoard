@@ -14,13 +14,16 @@ import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MainBoardMessageAdapter
+import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.MenuItemClickListener
+import com.hr.kurtovic.tomislav.familyboard.main_board.adapter.PopupMenuItem
+import com.hr.kurtovic.tomislav.familyboard.models.Message
 import kotlinx.android.synthetic.main.fragment_main_board.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 /**
  * A simple [Fragment] subclass.
  */
-class MainBoardFragment : Fragment() {
+class MainBoardFragment : Fragment(), MenuItemClickListener {
 
     private val mainBoardViewModel: MainBoardViewModel by viewModel()
 
@@ -48,17 +51,21 @@ class MainBoardFragment : Fragment() {
             main_board_progress_bar.isVisible = true
             main_board_input_add.isVisible = false
             return
-        } else {
+        }
+
+        if (!state.loading) {
             main_board_progress_bar.isVisible = false
             main_board_input_add.isVisible = true
         }
+
+        if (state.recycleViewConfigured) {
+            main_board_fragment_empty_message_tv.isVisible = state.isEmpty
+        }
+
         if (!state.recycleViewConfigured) {
             this.configureRecyclerView(state.messageQuery, state.currentMember?.uid)
             this.mainBoardViewModel.onEvent(Event.RecyclerViewConfigured)
         }
-
-        main_board_fragment_empty_message_tv.isVisible = state.isEmpty
-
     }
 
     private fun openInputFragment() {
@@ -70,7 +77,8 @@ class MainBoardFragment : Fragment() {
         //Configure Adapter & RecyclerView
         val mainBoardMessageAdapter = MainBoardMessageAdapter(
             generateOptionsForAdapter(messageQuery!!),
-            currentMemberId!!
+            currentMemberId!!,
+            this
         )
         mainBoardMessageAdapter.registerAdapterDataObserver(
             object : RecyclerView.AdapterDataObserver() {
@@ -96,4 +104,14 @@ class MainBoardFragment : Fragment() {
             .setQuery(query, T::class.java)
             .setLifecycleOwner(this)
             .build()
+
+    override fun onMenuItemClick(message: Message, menuItem: PopupMenuItem) {
+        when (menuItem) {
+            PopupMenuItem.ACCEPTED -> mainBoardViewModel.setMessageAccepted(message.id!!)
+            PopupMenuItem.SHOW -> (activity as MainActivity).showMessageDisplay(messageId = message.id!!)
+            PopupMenuItem.DELETE -> mainBoardViewModel.deleteMessage(messageId = message.id!!)
+        }
+    }
+
+
 }

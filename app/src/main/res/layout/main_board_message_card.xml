@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main_board_message_card"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/margin_large"
     android:layout_marginTop="@dimen/default_margin"
     android:layout_marginEnd="@dimen/margin_large"
@@ -13,36 +13,59 @@
 
 
     <ImageView
-        android:id="@+id/main_board_message_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/main_board_message_profile_image"
+        android:layout_width="@dimen/message_card_profile_image_size"
+        android:layout_height="@dimen/message_card_profile_image_size"
         android:layout_gravity="center"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginBottom="@dimen/margin_small"
         android:src="@drawable/ic_account_circle_black"
+        app:layout_constraintBottom_toTopOf="@id/main_board_message_category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/main_board_message_accept_button"
-        style="@style/DefaultButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
-        android:text="Check it out"
+    <ImageView
+        android:id="@+id/main_board_message_category"
+        android:layout_width="@dimen/message_card_category_image_size"
+        android:layout_height="@dimen/message_card_category_image_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:src="@drawable/ic_account_circle_black"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/main_board_message_profile_image"
+        app:layout_constraintStart_toStartOf="@+id/main_board_message_profile_image" />
+
+    <ImageView
+        android:id="@+id/main_board_message_accepted"
+        android:layout_width="@dimen/message_card_category_image_size"
+        android:layout_height="@dimen/message_card_category_image_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginBottom="@dimen/default_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/main_board_message_menu_button"
+        app:layout_constraintStart_toStartOf="@+id/main_board_message_menu_button" />
+
+    <ImageButton
+        android:id="@+id/main_board_message_menu_button"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="@dimen/message_card_menu_size"
+        android:layout_height="@dimen/message_card_menu_size"
+        android:layout_marginTop="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
+        android:src="@drawable/ic_more_vert"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/main_board_message_image" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New request"
-        app:layout_constraintBottom_toTopOf="@+id/main_board_message_accept_button"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="Title of message"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/main_board_message_image"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.228" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

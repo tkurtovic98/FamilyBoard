@@ -7,16 +7,23 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.models.Message
 
+interface MenuItemClickListener {
+    fun onMenuItemClick(message: Message, menuItem: PopupMenuItem)
+}
+
 
 class MainBoardMessageAdapter(
     options: FirestoreRecyclerOptions<Message>,
-    private val idCurrentUser: String
+    private val idCurrentUser: String,
+    private val menuItemClickListener: MenuItemClickListener
 ) : FirestoreRecyclerAdapter<Message, MessageViewHolder>(options) {
 
     override fun onBindViewHolder(messageViewHolder: MessageViewHolder, i: Int, message: Message) {
-        messageViewHolder.updateWithMessage(
+        messageViewHolder.bind(
             message,
-            this.idCurrentUser
+            this.idCurrentUser,
+            i,
+            menuItemClickListener
         )
     }
 

@@ -5,14 +5,19 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.models.Message
+import kotlinx.coroutines.tasks.await
 
 
 interface FamilyMessageService {
     fun messages(): Query
+    suspend fun getMessage(messageId: String): Message?
     fun postMessage(message: Message): Task<DocumentReference>
     fun setMessageId(familyName: String, id: String): Task<Void>
+    suspend fun setMessageAccepted(messageId: String, memberWhoAcceptedId: String): Void?
+    suspend fun deleteMessage(messageId: String): Void?
 }
 
 class FamilyMessageServiceImpl(private val context: Context) : FamilyMessageService {
@@ -34,6 +39,9 @@ class FamilyMessageServiceImpl(private val context: Context) : FamilyMessageServ
                 .limit(50)
     }
 
+    override suspend fun getMessage(messageId: String): Message? =
+            this.collection().document(messageId).get().await().toObject<Message>()
+
 
     override fun postMessage(message: Message): Task<DocumentReference> {
         return this.collection()
@@ -46,4 +54,19 @@ class FamilyMessageServiceImpl(private val context: Context) : FamilyMessageServ
                 .document(id)
                 .update("id", id)
     }
+
+    override suspend fun setMessageAccepted(
+        messageId: String,
+        memberWhoAcceptedId: String
+    ): Void? =
+            this.collection()
+                    .document(messageId)
+                    .update(mapOf("accepted" to true, "memberWhoAcceptedId" to memberWhoAcceptedId))
+                    .await()
+
+    override suspend fun deleteMessage(messageId: String): Void? =
+            this.collection()
+                    .document(messageId)
+                    .delete()
+                    .await()
 }

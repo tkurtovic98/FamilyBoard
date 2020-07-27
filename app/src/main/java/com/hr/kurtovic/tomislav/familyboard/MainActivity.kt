@@ -3,10 +3,12 @@ package com.hr.kurtovic.tomislav.familyboard
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.commit
 import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.MessageInputFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.message_display.MessageDisplayDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
@@ -38,6 +40,10 @@ class MainActivity : AppCompatActivity() {
         replaceFragment(MessageInputFragment.newInstance(), addToBackStack = true)
     }
 
+    fun showMessageDisplay(messageId: String) {
+        replaceFragment(MessageDisplayDialogFragment.newInstance(messageId), addToBackStack = true)
+    }
+
     private fun replaceFragment(fragment: Fragment, addToBackStack: Boolean = false) {
         val tag = fragment::class.java.simpleName
         val currentFragment = supportFragmentManager.findFragmentByTag(tag)
@@ -45,6 +51,7 @@ class MainActivity : AppCompatActivity() {
             return;
         }
         supportFragmentManager.commit {
+            this.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             if (addToBackStack) {
                 addToBackStack(tag)
             }
