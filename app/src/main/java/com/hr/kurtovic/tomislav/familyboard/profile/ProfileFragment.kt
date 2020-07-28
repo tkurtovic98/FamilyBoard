@@ -57,7 +57,7 @@ class ProfileFragment : Fragment() {
         } else View.GONE
 
         if (state.spinnerConfigure) {
-            configureSpinner(state.familyList, state.currentFamilyName)
+            configureSpinner(state.families.map { it.name!! }, state.currentFamilyName)
             profileViewModel.onEvent(Event.SpinnerConfigured)
         }
 

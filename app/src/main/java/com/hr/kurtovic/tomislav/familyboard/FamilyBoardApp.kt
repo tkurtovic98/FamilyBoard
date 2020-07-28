@@ -27,7 +27,7 @@ class FamilyBoardApp : Application() {
             androidContext(this@FamilyBoardApp)
             modules(
                 listOf(
-                    api, authentication, mainBoard, pets, familyList, profileFragment, sharedModel
+                    api, authentication, mainBoard, pets, familyList, profile, appModels
                 )
             )
         }
@@ -46,7 +46,7 @@ val authentication = module {
 }
 
 val pets = module {
-    viewModel { PetsViewModel(get(), get()) }
+    viewModel { PetsViewModel(androidApplication().applicationContext, get(), get()) }
 }
 
 val mainBoard = module {
@@ -58,10 +58,12 @@ val familyList = module {
     viewModel { FamilyListViewModel(get(), get()) }
 }
 
-val profileFragment = module {
+val profile = module {
     viewModel { ProfileViewModel(get(), get(), get()) }
 }
 
-val sharedModel = module {
+val appModels = module {
     viewModel { SharedViewModel(androidApplication().applicationContext) }
+    viewModel { FragmentHolderViewModel(androidApplication().applicationContext, get()) }
+
 }

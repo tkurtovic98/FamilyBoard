@@ -135,11 +135,12 @@ class FamilyListViewModel(
         //TODO(add family to member)
         val memberId = familyMemberService.currentMemberId
         familyService.addFamilyMember(familyName, memberId).addOnSuccessListener {
-            familyMemberService.addFamily(memberId, familyName).addOnSuccessListener {
-                onEvent(Event.FamilyMemberAdded)
-            }.addOnFailureListener { e ->
-                onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
-            }
+            familyMemberService.addFamily(memberId, Family(name = familyName))
+                    .addOnSuccessListener {
+                        onEvent(Event.FamilyMemberAdded)
+                    }.addOnFailureListener { e ->
+                        onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
+                    }
         }.addOnFailureListener { e ->
             onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
         }

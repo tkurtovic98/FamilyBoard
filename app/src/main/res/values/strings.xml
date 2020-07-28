@@ -43,5 +43,11 @@
     <string name="family_member_add_generic">Problem while adding family member</string>
     <string name="family_name_key">FAMILY_NAME</string>
     <string name="family_shared_prefs">FAMILY_SHARED_PREFS</string>
+    <string name="when_to_do_it_pets">When to do it?</string>
+    <string name="message_content_what">What to do</string>
+    <string name="message_content_when">When to do it</string>
+    <string name="category_pets">pets</string>
+
+    <string name="hour_minute_format">%d:%d</string>
 
 </resources>
