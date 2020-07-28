@@ -25,7 +25,10 @@ enum class PopupMenuItem {
 class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val categories = mapOf<String, Drawable>(
-        "pets" to itemView.resources.getDrawable(R.drawable.ic_pets_black, null),
+        itemView.context.getString(R.string.category_pets) to itemView.resources.getDrawable(
+            R.drawable.ic_pets_black,
+            null
+        ),
         "event" to itemView.resources.getDrawable(R.drawable.ic_event, null),
         "store" to itemView.resources.getDrawable(R.drawable.ic_store_black, null)
     )

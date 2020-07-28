@@ -97,4 +97,12 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="BottomNavigation" parent="@style/Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="itemIconSize">@dimen/bottom_navigation_icon_size</item>
+        <item name="labelVisibilityMode">unlabeled</item>
+    </style>
+
+
 </resources>
