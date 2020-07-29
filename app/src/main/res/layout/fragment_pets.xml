@@ -39,7 +39,6 @@
             android:id="@+id/pets_when_input"
             style="@style/InputEditTextStyle"
             android:hint="@string/when_to_do_it_pets"
-            android:inputType="time"
             app:layout_constraintStart_toStartOf="@+id/pets_what_input"
             app:layout_constraintTop_toBottomOf="@+id/pets_what_input" />
 

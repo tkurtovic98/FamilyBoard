@@ -23,6 +23,8 @@
     <string name="pets">Pets</string>
     <string name="until_when">Until when?</string>
     <string name="what_to_do_pets">What to do?</string>
+    <string name="what_event">What is the event?</string>
+
     <string name="who_pets">Who?</string>
     <string name="enter_family_name_or_code">Enter family name or code</string>
     <string name="no_families_to_display">No families to display</string>
@@ -44,10 +46,17 @@
     <string name="family_name_key">FAMILY_NAME</string>
     <string name="family_shared_prefs">FAMILY_SHARED_PREFS</string>
     <string name="when_to_do_it_pets">When to do it?</string>
+    <string name="when_event">When is the event?</string>
     <string name="message_content_what">What to do</string>
     <string name="message_content_when">When to do it</string>
     <string name="category_pets">pets</string>
 
-    <string name="hour_minute_format">%d:%d</string>
+    <string name="hour_minute_format">%02d:%02d</string>
+    <string name="message_accept_text">Accepted by %1$s</string>
+    <string name="message_display_not_accepted">Nobody has accepted this task</string>
+    <string name="event_input_title">Events</string>
+    <string name="store_input_title">Store</string>
+    <string name="zero_text">0</string>
+
 
 </resources>
