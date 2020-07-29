@@ -8,14 +8,17 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.hr.kurtovic.tomislav.familyboard.MainActivity
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.SharedViewModel
+import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
 import com.hr.kurtovic.tomislav.familyboard.util.Box
 import kotlinx.android.synthetic.main.profile_fragment.*
+import kotlinx.android.synthetic.main.profile_fragment.view.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -24,7 +27,6 @@ class ProfileFragment : Fragment() {
 
     private val profileViewModel: ProfileViewModel by viewModel()
     private val sharedViewModel: SharedViewModel by sharedViewModel()
-
 
     companion object {
         fun newInstance() = ProfileFragment()
@@ -41,7 +43,8 @@ class ProfileFragment : Fragment() {
         profileViewModel.onEvent(Event.FamilyNameChange(familyName = sharedViewModel.sharedFamilyName.value!!))
         profileViewModel.state.observe(
             viewLifecycleOwner,
-            Observer { render(it) })
+            Observer { render(it) }
+        )
         profile_logout_button.setOnClickListener { logout() }
     }
 
@@ -51,10 +54,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun render(state: State) {
-        profile_progress_bar.visibility = if (state.loading) {
-            View.VISIBLE
-            return
-        } else View.GONE
+        profile_progress_bar.isVisible = state.loading
 
         if (state.spinnerConfigure) {
             configureSpinner(state.families.map { it.name!! }, state.currentFamilyName)
@@ -62,16 +62,18 @@ class ProfileFragment : Fragment() {
         }
 
         if (state.firstTimeLoading) {
-            state.currentMember?.apply {
-                Glide.with(requireContext())
-                        .load(this.urlPicture)
-                        .circleCrop()
-                        .into(profile_profile_image)
-
-                profile_member_name.text = this.name
-            }
+            renderMemberInfo(state.currentMember!!)
             profileViewModel.onEvent(Event.FirstTimeLoaded)
         }
+    }
+
+    private fun renderMemberInfo(currentMember: FamilyMember) {
+        Glide.with(requireContext())
+                .load(currentMember.urlPicture)
+                .circleCrop()
+                .into(requireView().profile_profile_image)
+
+        profile_member_name.text = currentMember.name
     }
 
 
@@ -101,18 +103,15 @@ class ProfileFragment : Fragment() {
                 }
 
                 private fun changeCurrentFamilyName(
-                    familyFromAdapter: String
+                    selectedFamily: String
                 ) {
-                    if (familyName.content != null) {
-                        familyName.take {
-                            if (it != familyFromAdapter) {
-                                setSelection(familyAdapter.getPosition(it))
-                            }
-                        }
-                    } else {
-                        sharedViewModel.changeFamilyName(familyFromAdapter)
+                    if (familyName.content != null && familyName.content!! != selectedFamily) {
+                        setSelection(familyAdapter.getPosition(familyName.content!!))
+                        familyName.content = null
+                        return
                     }
 
+                    sharedViewModel.changeFamilyName(selectedFamily)
                 }
 
             })
