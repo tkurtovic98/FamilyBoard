@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.hr.kurtovic.tomislav.familyboard.R
 import kotlinx.android.synthetic.main.fragment_pets.*
-import kotlinx.android.synthetic.main.fragment_pets.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -40,13 +39,19 @@ class PetsFragment : Fragment() {
 
         pets_what_input.doAfterTextChanged { petsViewModel.onEvent(Event.WhatInputChange(it.toString())) }
         pets_when_input.doAfterTextChanged { petsViewModel.onEvent(Event.UntilWhenInputChange(it.toString())) }
-        pets_when_input.setOnClickListener {
-            makeTimePicker(it!! as EditText)
+
+        pets_when_input.apply {
+            onFocusChangeListener = View.OnFocusChangeListener { v: View, b: Boolean ->
+                if (b) {
+                    makeTimePicker(v as EditText)
+                }
+            }
+            setOnClickListener { makeTimePicker(this as EditText) }
         }
 
         petsViewModel.state.observe(viewLifecycleOwner, Observer { render(it!!) })
 
-        view.submit_button.setOnClickListener { submit() }
+        submit_button.setOnClickListener { submit() }
     }
 
     private fun makeTimePicker(editText: EditText) {

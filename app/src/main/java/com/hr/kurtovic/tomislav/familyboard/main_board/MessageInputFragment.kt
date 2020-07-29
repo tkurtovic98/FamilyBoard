@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.hr.kurtovic.tomislav.familyboard.R
-import com.hr.kurtovic.tomislav.familyboard.main_board.input.EventFragment
-import com.hr.kurtovic.tomislav.familyboard.main_board.input.StoreFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.event.EventFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsFragment
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.store.StoreFragment
 import kotlinx.android.synthetic.main.fragment_message_input.view.*
 
 /**

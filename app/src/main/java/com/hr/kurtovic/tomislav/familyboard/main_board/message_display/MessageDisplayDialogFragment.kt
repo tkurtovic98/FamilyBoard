@@ -2,18 +2,13 @@ package com.hr.kurtovic.tomislav.familyboard.main_board.message_display
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
+import android.view.*
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.hr.kurtovic.tomislav.familyboard.R
 import kotlinx.android.synthetic.main.message_display.*
-import kotlinx.android.synthetic.main.message_display.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -36,24 +31,50 @@ class MessageDisplayDialogFragment : DialogFragment() {
 
     private fun render(state: State) {
         val message = state.message
-        val author = state.memberWhoAccepted
+        val memberWhoAccepted = state.memberWhoAccepted
 
-        if (message!!.accepted) {
-            Glide.with(requireContext())
-                    .load(author?.urlPicture)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(requireView().message_display_profile_image)
+        message_display_title.text = if (message!!.accepted) {
+            getString(
+                R.string.message_accept_text,
+                memberWhoAccepted?.name!!
+            )
+        } else {
+            getString(R.string.message_display_not_accepted)
         }
 
-        message_display_title.text = author?.name
-        var contents = ""
-        for (content in message.content!!.values) {
-            contents += content.plus("\n")
+        memberWhoAccepted?.let {
+            message_display_title.text = it.name!!
         }
-        message_display_data.text = contents
+
+        val contentContainer = message_display_content_container
+
+        for (content in message.content!!) {
+            val title = createTextView(
+                content = content.key,
+                textAppearance = android.R.style.TextAppearance_Material_Display2
+            )
+            val messageText = createTextView(
+                content = content.value,
+                textAppearance = android.R.style.TextAppearance_Material_Display1
+            )
+            contentContainer.addView(title)
+            contentContainer.addView(messageText)
+        }
         message_display_progress_bar.isVisible = false
     }
 
+    private fun createTextView(content: String, textAppearance: Int): TextView {
+        val textView = TextView(requireContext())
+        textView.requestLayout()
+        textView.text = content
+        textView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        textView.setTextAppearance(textAppearance)
+        textView.gravity = Gravity.CENTER
+        return textView
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

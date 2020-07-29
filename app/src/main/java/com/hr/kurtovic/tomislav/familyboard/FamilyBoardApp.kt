@@ -7,7 +7,9 @@ import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthViewModel
 import com.hr.kurtovic.tomislav.familyboard.family_list.FamilyListViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.MainBoardViewModel
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.event.EventViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsViewModel
+import com.hr.kurtovic.tomislav.familyboard.main_board.input.store.StoreViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.message_display.MessageDisplayViewModel
 import com.hr.kurtovic.tomislav.familyboard.profile.ProfileViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -27,7 +29,7 @@ class FamilyBoardApp : Application() {
             androidContext(this@FamilyBoardApp)
             modules(
                 listOf(
-                    api, authentication, mainBoard, pets, familyList, profile, appModels
+                    api, authentication, mainBoard, input, familyList, profile, appModels
                 )
             )
         }
@@ -45,8 +47,10 @@ val authentication = module {
     viewModel { AuthViewModel(get(), get()) }
 }
 
-val pets = module {
+val input = module {
     viewModel { PetsViewModel(androidApplication().applicationContext, get(), get()) }
+    viewModel { EventViewModel(get(), get()) }
+    viewModel { StoreViewModel(androidApplication().resources, get(), get()) }
 }
 
 val mainBoard = module {
@@ -65,5 +69,4 @@ val profile = module {
 val appModels = module {
     viewModel { SharedViewModel(androidApplication().applicationContext) }
     viewModel { FragmentHolderViewModel(androidApplication().applicationContext, get()) }
-
 }

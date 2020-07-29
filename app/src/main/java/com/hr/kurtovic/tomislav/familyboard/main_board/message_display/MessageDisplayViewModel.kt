@@ -27,7 +27,11 @@ class MessageDisplayViewModel(
     init {
         viewModelScope.launch {
             val message = messageService.getMessage(messageId)
-            val author = familyMemberService.getMember(message?.memberWhoAcceptedId!!)
+
+            val author = message?.memberWhoAcceptedId?.let {
+                familyMemberService.getMember(it)
+            }
+
             internalLiveData.postValue(State(message = message, memberWhoAccepted = author))
         }
     }
