@@ -22,8 +22,7 @@ class FamilyListAdapter(
         i: Int,
         family: Family
     ) {
-        familyListViewHolder.updateWithFamily(family)
-        familyListViewHolder.addListener(listener)
+        familyListViewHolder.bind(family, listener)
     }
 
 

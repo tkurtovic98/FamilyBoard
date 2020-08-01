@@ -4,35 +4,41 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.FirebaseFirestoreException
+import com.google.firebase.firestore.Query
 import com.hr.kurtovic.tomislav.familyboard.R
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyService
 import com.hr.kurtovic.tomislav.familyboard.models.Family
 import com.hr.kurtovic.tomislav.familyboard.util.Box
+import kotlinx.coroutines.launch
 
 data class State(
-    val familyName: String = "",
+    val family: Family? = null,
     val submitError: Box<Int> = Box(),
-    val isEmpty: Boolean = true,
+    val isEmpty: Boolean = false,
     val familyAddInProgress: Boolean = false,
     val memberToFamilyAddInProgress: Boolean = false,
     val successMessage: String = "",
-    val loading: Boolean = true
+    val recyclerViewConfigured: Boolean = false,
+    val familyListQuery: Query? = null
 )
 
 
 sealed class Event {
-    data class FamilyNameChange(val familyName: String) : Event()
     object FamilyAdd : Event()
     object FamilyAdded : Event()
+    object RecyclerViewConfigured : Event()
+    object FamilyMemberAdded : Event()
+
 
     data class FamilyMemberAdd(val familyName: String) : Event()
-    object FamilyMemberAdded : Event()
+    data class FamilyNameChange(val familyName: String) : Event()
+
 
     data class ListDataChanged(val isEmpty: Boolean) : Event()
     data class ErrorEvent(val error: Error) : Event()
-    object RecyclerViewConfigured : Event()
 }
 
 sealed class Error {
@@ -66,15 +72,15 @@ sealed class Error {
 fun reduce(currentState: State, event: Event): State =
         when (event) {
             Event.FamilyAdd -> currentState.copy(familyAddInProgress = true)
-            Event.RecyclerViewConfigured -> currentState.copy(loading = false)
+            Event.RecyclerViewConfigured -> currentState.copy(recyclerViewConfigured = true)
             is Event.FamilyAdded -> currentState.copy(
-                familyName = "",
+                family = null,
                 familyAddInProgress = false
             )
-            is Event.FamilyNameChange -> currentState.copy(familyName = event.familyName)
+            is Event.FamilyNameChange -> currentState.copy(family = Family(name = event.familyName))
             is Event.ListDataChanged -> currentState.copy(isEmpty = event.isEmpty)
             is Event.FamilyMemberAdd -> currentState.copy(
-                familyName = event.familyName,
+                family = Family(name = event.familyName),
                 memberToFamilyAddInProgress = true
             )
             is Event.FamilyMemberAdded -> currentState.copy(
@@ -103,7 +109,7 @@ class FamilyListViewModel(
 ) : ViewModel() {
 
     private val internalState = MutableLiveData<State>().apply {
-        value = State()
+        value = State(familyListQuery = familyService.showFamilies())
     }
 
     val state: LiveData<State> = internalState
@@ -113,36 +119,41 @@ class FamilyListViewModel(
         val newState = reduce(currentState, event)
         internalState.postValue(newState)
 
-        if (newState.familyAddInProgress) {
-            addFamily(newState)
+        checkIfAddInProgressAndRun(newState)
+    }
+
+    private fun checkIfAddInProgressAndRun(state: State) {
+        if (state.familyAddInProgress) {
+            addFamily(state.family)
         }
 
-        if (newState.memberToFamilyAddInProgress) {
-            addFamilyMember(newState.familyName)
+        if (state.memberToFamilyAddInProgress) {
+            connectFamilyAndMember(state.family)
         }
     }
 
-    private fun addFamily(state: State) {
+    private fun addFamily(family: Family?) {
         //TODO(check for errors in input)
-        familyService.addFamily(Family(name = state.familyName)).addOnSuccessListener {
-            onEvent(Event.FamilyAdded)
-        }.addOnFailureListener {
-            onEvent(Event.ErrorEvent(Error.FamilyAddError(it)))
+        viewModelScope.launch {
+            try {
+                familyService.addFamily(family!!)
+            } catch (e: FirebaseFirestoreException) {
+                onEvent(Event.ErrorEvent(Error.FamilyAddError(e)))
+            }
         }
     }
 
-    private fun addFamilyMember(familyName: String) {
+    private fun connectFamilyAndMember(family: Family?) {
         //TODO(add family to member)
         val memberId = familyMemberService.currentMemberId
-        familyService.addFamilyMember(familyName, memberId).addOnSuccessListener {
-            familyMemberService.addFamily(memberId, Family(name = familyName))
-                    .addOnSuccessListener {
-                        onEvent(Event.FamilyMemberAdded)
-                    }.addOnFailureListener { e ->
-                        onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
-                    }
-        }.addOnFailureListener { e ->
-            onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
+        viewModelScope.launch {
+            try {
+                familyService.addFamilyMember(family!!, memberId)
+                familyMemberService.addFamily(memberId, family)
+                onEvent(Event.FamilyMemberAdded)
+            } catch (e: FirebaseFirestoreException) {
+                onEvent(Event.ErrorEvent(Error.FamilyMemberAddError(e)))
+            }
         }
     }
 

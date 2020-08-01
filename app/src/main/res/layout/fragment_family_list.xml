@@ -6,15 +6,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".family_list.FamilyListFragment">
 
-
-    <include
-        android:id="@+id/family_list_progress_bar"
-        layout="@layout/progress_bar" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/family_list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/family_list_progress_bar"
+            layout="@layout/progress_bar" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/family_search_tab"

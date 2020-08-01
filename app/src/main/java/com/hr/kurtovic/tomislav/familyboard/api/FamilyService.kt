@@ -5,13 +5,14 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.hr.kurtovic.tomislav.familyboard.models.Family
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
+import kotlinx.coroutines.tasks.await
 
 
 interface FamilyService {
 
-    fun addFamily(family: Family): Task<Void>
+    suspend fun addFamily(family: Family): Void?
     fun addFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
-    fun addFamilyMember(familyName: String, familyMemberId: String): Task<Void>
+    suspend fun addFamilyMember(family: Family, familyMemberId: String): Void?
     fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void>
     fun showFamilies(): CollectionReference
 
@@ -26,8 +27,8 @@ class FamilyServiceImpl : FamilyService {
         return familiesCollection
     }
 
-    override fun addFamily(family: Family): Task<Void> =
-            familiesCollection.document(family.name!!).set(family)
+    override suspend fun addFamily(family: Family): Void? =
+            familiesCollection.document(family.name!!).set(family).await()
 
     override fun addFamilyMember(
         familyName: String,
@@ -35,9 +36,11 @@ class FamilyServiceImpl : FamilyService {
     ): Task<Void> =
             membersCollection(familyName, familyMember.uid!!).set(familyMember)
 
-    override fun addFamilyMember(familyName: String, familyMemberId: String): Task<Void> =
-            membersCollection(familyName, familyMemberId).set(mapOf("memberId" to familyMemberId))
-
+    override suspend fun addFamilyMember(family: Family, familyMemberId: String): Void? =
+            membersCollection(
+                family.name!!,
+                familyMemberId
+            ).set(mapOf("memberId" to familyMemberId)).await()
 
 
     override fun deleteFamilyMember(familyName: String, familyMember: FamilyMember): Task<Void> =

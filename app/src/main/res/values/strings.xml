@@ -57,6 +57,7 @@
     <string name="event_input_title">Events</string>
     <string name="store_input_title">Store</string>
     <string name="zero_text">0</string>
+    <string name="create_new_family">Create new family</string>
 
 
 </resources>
