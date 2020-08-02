@@ -38,7 +38,6 @@ class FragmentHolder : Fragment() {
     }
 
     private fun configureBottomNavigation() {
-        //TODO replace recreation of fragments every time the item changes
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.room_list_item -> {
@@ -94,6 +93,10 @@ class FragmentHolder : Fragment() {
 
     private fun replaceFragment(fragment: Fragment) {
         val tag = fragment::class.java.simpleName
+        val currentFragment = parentFragmentManager.findFragmentByTag(tag)
+        if (currentFragment?.isVisible == true) {
+            return
+        }
         parentFragmentManager.commit {
             this.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
             replace(R.id.main_board_fragment_container, fragment, tag)
