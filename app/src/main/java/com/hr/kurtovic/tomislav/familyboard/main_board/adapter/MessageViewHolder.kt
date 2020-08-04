@@ -21,7 +21,6 @@ enum class PopupMenuItem {
     DELETE
 }
 
-
 class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val categories = mapOf<String, Drawable>(
@@ -29,8 +28,14 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             R.drawable.ic_pets_black,
             null
         ),
-        "event" to itemView.resources.getDrawable(R.drawable.ic_event, null),
-        "store" to itemView.resources.getDrawable(R.drawable.ic_store_black, null)
+        itemView.context.getString(R.string.category_event) to itemView.resources.getDrawable(
+            R.drawable.ic_event,
+            null
+        ),
+        itemView.context.getString(R.string.category_store) to itemView.resources.getDrawable(
+            R.drawable.ic_store_black,
+            null
+        )
     )
 
     fun bind(
@@ -68,7 +73,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                     .into(itemView.main_board_message_accepted)
         }
 
-        itemView.main_board_message_menu_button.setOnClickListener {
+        itemView.main_board_message_card_menu_button.setOnClickListener {
             popupMenu(
                 menuItemClickListener,
                 message,
@@ -82,7 +87,7 @@ class MessageViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         message: Message,
         canDelete: Boolean
     ) {
-        val popup = PopupMenu(itemView.context, itemView.main_board_message_menu_button)
+        val popup = PopupMenu(itemView.context, itemView.main_board_message_card_menu_button)
         //inflating menu from xml resource
         popup.inflate(R.menu.message_card_menu)
 

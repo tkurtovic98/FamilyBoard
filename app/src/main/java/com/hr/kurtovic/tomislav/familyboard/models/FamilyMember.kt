@@ -7,6 +7,7 @@ data class FamilyMember(
     var uid: String? = null,
     var name: String? = null,
     var role: String? = null,
-    var urlPicture: String? = null
+    var urlPicture: String? = null,
+    var registrationTokens: MutableList<String>? = null
 )
 

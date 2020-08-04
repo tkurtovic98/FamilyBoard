@@ -54,6 +54,7 @@
     <dimen name="message_card_profile_image_size">48dp</dimen>
     <dimen name="message_card_category_image_size">24dp</dimen>
     <dimen name="message_card_menu_size">24dp</dimen>
+    <dimen name="fab_max_image_size">48dp</dimen>
 
 
 </resources>

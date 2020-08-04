@@ -58,6 +58,10 @@
     <string name="store_input_title">Store</string>
     <string name="zero_text">0</string>
     <string name="create_new_family">Create new family</string>
+    <string name="main_board_no_message">No messages to display. Add some!</string>
+    <string name="action_aborted_error">Action aborted. Try again.</string>
+    <string name="category_event">event</string>
+    <string name="category_store">store</string>
 
 
 </resources>
