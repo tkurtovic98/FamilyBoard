@@ -62,6 +62,7 @@
     <string name="action_aborted_error">Action aborted. Try again.</string>
     <string name="category_event">event</string>
     <string name="category_store">store</string>
+    <string name="default_notification_channel_id">FCM_Default</string>
 
 
 </resources>

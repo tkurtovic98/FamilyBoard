@@ -14,9 +14,21 @@ class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
+        retrieveTokenAndAdd()
+    }
 
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        remoteMessage.notification?.let {
+            Log.d("FCM", it.body!!)
+        }
+    }
+
+    private fun retrieveTokenAndAdd() {
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             val newToken = it?.token
+
+            Log.d("FCM", "Token is $newToken")
 
             if (familyMemberService.currentMemberId.isNotEmpty()) {
                 addTokenToFirestore(newToken)
@@ -30,24 +42,17 @@ class FirebaseMessagingServiceImpl : FirebaseMessagingService() {
 
         GlobalScope.launch {
             familyMemberService.getFCMRegistrationTokens { tokens ->
-                if (tokens.contains(newRegistrationToken)) {
-                    return@getFCMRegistrationTokens
+
+                tokens.apply {
+                    if (this.contains(newRegistrationToken))
+                        return@getFCMRegistrationTokens
+                    this.add(newRegistrationToken)
+                    familyMemberService.setFCMRegistrationTokens(this)
                 }
 
-                tokens.add(newRegistrationToken)
-                familyMemberService.setFCMRegistrationTokens(tokens)
             }
         }
 
     }
-
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-        remoteMessage.notification?.let {
-            //TODO: Show notification
-            Log.d("FCM", "FCM message received")
-        }
-    }
-
 
 }

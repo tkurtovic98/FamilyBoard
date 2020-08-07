@@ -16,11 +16,21 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="MainActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_foreground" />
+
         <service
             android:name=".api.FirebaseMessagingServiceImpl"
             android:exported="false">

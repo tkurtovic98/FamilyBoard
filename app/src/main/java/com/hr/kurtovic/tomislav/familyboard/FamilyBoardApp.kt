@@ -1,6 +1,7 @@
 package com.hr.kurtovic.tomislav.familyboard
 
 import android.app.Application
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.hr.kurtovic.tomislav.familyboard.api.*
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthServiceImpl
@@ -40,11 +41,12 @@ val api = module {
     single<FamilyMemberService> { FamilyMemberServiceImpl() }
     single<FamilyMessageService> { FamilyMessageServiceImpl(androidApplication().applicationContext) }
     single<FamilyService> { FamilyServiceImpl() }
+    single<FirebaseMessagingService> { FirebaseMessagingServiceImpl() }
 }
 
 val authentication = module {
     single<AuthService> { AuthServiceImpl() }
-    viewModel { AuthViewModel(get(), get()) }
+    viewModel { AuthViewModel(get(), get(), get()) }
 }
 
 val input = module {

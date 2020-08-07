@@ -71,7 +71,7 @@ class FamilyMemberServiceImpl : FamilyMemberService {
             .toObjects()
 
     override suspend fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
-        onComplete(currentMember()?.registrationTokens!!)
+        onComplete(currentMember()?.registrationTokens ?: mutableListOf())
     }
 
     override fun setFCMRegistrationTokens(registrationTokens: MutableList<String>) {
