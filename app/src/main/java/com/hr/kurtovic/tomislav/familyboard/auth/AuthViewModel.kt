@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import io.reactivex.disposables.CompositeDisposable
 
@@ -23,7 +24,8 @@ sealed class Event {
 
 class AuthViewModel(
     private val authService: AuthService,
-    private val familyMemberService: FamilyMemberService
+    private val familyMemberService: FamilyMemberService,
+    private val firebaseMessagingService: FirebaseMessagingService
 ) : ViewModel() {
 
     //TODO(Extract webclient to strings)
@@ -57,10 +59,11 @@ class AuthViewModel(
             }
             is Event.SignInWithGoogle -> {
                 familyMemberService.createMember(
-                uid = familyMemberService.currentMemberId,
-                memberName = event.acct.displayName!!,
-                urlPicture = event.acct.photoUrl.toString()
-            )
+                    uid = familyMemberService.currentMemberId,
+                    memberName = event.acct.displayName!!,
+                    urlPicture = event.acct.photoUrl.toString()
+                )
+                firebaseMessagingService.onNewToken("DUMMY")
                 internalResponseObserver.postValue(Response(true))
             }
         }

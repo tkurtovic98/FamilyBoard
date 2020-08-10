@@ -19,6 +19,8 @@ interface FamilyMemberService {
     fun deleteMember(uid: String): Task<Void>
     fun addFamily(uid: String, family: Family): Task<Void>
     suspend fun families(): List<Family>
+    suspend fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit)
+    fun setFCMRegistrationTokens(registrationTokens: MutableList<String>)
     val currentMemberId: String
 }
 
@@ -28,7 +30,7 @@ class FamilyMemberServiceImpl : FamilyMemberService {
         get() = ApiUtil.MEMBERS_COLLECTION
 
     override val currentMemberId: String
-        get() = FirebaseAuth.getInstance().currentUser!!.uid
+        get() = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
     override fun currentMemberRef(): DocumentReference = ApiUtil.rootCollection(membersCollection)
             .document(currentMemberId)
@@ -68,5 +70,11 @@ class FamilyMemberServiceImpl : FamilyMemberService {
             .document(currentMemberId).collection(ApiUtil.FAMILIES_COLLECTION).get().await()
             .toObjects()
 
+    override suspend fun getFCMRegistrationTokens(onComplete: (tokens: MutableList<String>) -> Unit) {
+        onComplete(currentMember()?.registrationTokens ?: mutableListOf())
+    }
 
+    override fun setFCMRegistrationTokens(registrationTokens: MutableList<String>) {
+        currentMemberRef().update(mapOf("registrationTokens" to registrationTokens))
+    }
 }

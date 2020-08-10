@@ -45,27 +45,28 @@
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/main_board_message_menu_button"
-        app:layout_constraintStart_toStartOf="@+id/main_board_message_menu_button" />
+        app:layout_constraintEnd_toEndOf="@+id/main_board_message_card_menu_button"
+        app:layout_constraintStart_toStartOf="@+id/main_board_message_card_menu_button" />
 
     <ImageButton
-        android:id="@+id/main_board_message_menu_button"
+        android:id="@+id/main_board_message_card_menu_button"
         style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
         android:layout_width="@dimen/message_card_menu_size"
         android:layout_height="@dimen/message_card_menu_size"
         android:layout_marginTop="@dimen/margin_small"
-        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/default_margin"
         android:src="@drawable/ic_more_vert"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/main_board_message_card_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small"
-        android:text="Title of message"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
