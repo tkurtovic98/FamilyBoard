@@ -15,41 +15,43 @@ import kotlinx.coroutines.launch
 
 data class State(
     val families: List<Family> = emptyList(),
+
     val initialized: Boolean = false,
+
     val currentMember: FamilyMember? = null,
+
     val spinnerConfigured: Boolean = false,
-    val currentFamilyName: String? = null,
-    val sameFamilyName: Boolean = false
+
+    val currentFamilyName: String? = null
 )
 
 sealed class Event {
-    data class FamilyListChange(val families: List<Family>) : Event()
     data class FamilyNameChange(val familyName: String) : Event()
+
     data class Init(val currentMember: FamilyMember?, val families: List<Family>) : Event()
+
     object SpinnerConfigured : Event()
 }
 
 
 fun reduce(event: Event, state: State): State =
         when (event) {
+
             is Event.Init -> state.copy(
                 families = event.families,
                 currentMember = event.currentMember,
                 initialized = true
             )
-            is Event.FamilyListChange -> state.copy(
-                families = event.families,
-                spinnerConfigured = true
-            )
-            is Event.FamilyNameChange -> {
 
+            is Event.FamilyNameChange -> {
                 when (state.currentFamilyName) {
                     event.familyName -> state
                     else -> state.copy(currentFamilyName = event.familyName)
                 }
-
             }
+
             Event.SpinnerConfigured -> state.copy(spinnerConfigured = true)
+
         }
 
 
