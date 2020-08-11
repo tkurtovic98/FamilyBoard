@@ -9,26 +9,24 @@ import com.hr.kurtovic.tomislav.familyboard.api.FamilyMemberService
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthService
 import com.hr.kurtovic.tomislav.familyboard.models.Family
 import com.hr.kurtovic.tomislav.familyboard.models.FamilyMember
-import com.hr.kurtovic.tomislav.familyboard.util.Box
+import com.hr.kurtovic.tomislav.familyboard.util.SharedPreference
 import kotlinx.coroutines.launch
 
 
 data class State(
     val families: List<Family> = emptyList(),
+    val initialized: Boolean = false,
     val currentMember: FamilyMember? = null,
-    val spinnerConfigure: Boolean = false,
-    val loading: Boolean = true,
-    val firstTimeLoading: Boolean = true,
-    val currentFamilyName: Box<String> = Box()
+    val spinnerConfigured: Boolean = false,
+    val currentFamilyName: String? = null,
+    val sameFamilyName: Boolean = false
 )
 
 sealed class Event {
     data class FamilyListChange(val families: List<Family>) : Event()
-    data class CurrentMemberChange(val currentMember: FamilyMember?) : Event()
     data class FamilyNameChange(val familyName: String) : Event()
     data class Init(val currentMember: FamilyMember?, val families: List<Family>) : Event()
     object SpinnerConfigured : Event()
-    object FirstTimeLoaded : Event()
 }
 
 
@@ -36,35 +34,56 @@ fun reduce(event: Event, state: State): State =
         when (event) {
             is Event.Init -> state.copy(
                 families = event.families,
-                spinnerConfigure = true,
                 currentMember = event.currentMember,
-                loading = false
+                initialized = true
             )
             is Event.FamilyListChange -> state.copy(
                 families = event.families,
-                spinnerConfigure = true
+                spinnerConfigured = true
             )
-            is Event.CurrentMemberChange -> state.copy(
-                currentMember = event.currentMember,
-                loading = false
-            )
-            is Event.FamilyNameChange -> state.copy(currentFamilyName = Box(event.familyName))
-            Event.FirstTimeLoaded -> state.copy(firstTimeLoading = false)
-            Event.SpinnerConfigured -> state.copy(spinnerConfigure = false)
+            is Event.FamilyNameChange -> {
+
+                when (state.currentFamilyName) {
+                    event.familyName -> state
+                    else -> state.copy(currentFamilyName = event.familyName)
+                }
+
+            }
+            Event.SpinnerConfigured -> state.copy(spinnerConfigured = true)
         }
 
 
 class ProfileViewModel(
     private val familyMemberService: FamilyMemberService,
     private val authService: AuthService,
-    private val memberService: FamilyMemberService
+    private val memberService: FamilyMemberService,
+    private val sharedPreference: SharedPreference
 ) : ViewModel() {
 
     private val internalState = MutableLiveData<State>().apply { value = State() }
 
     val state: LiveData<State> = internalState
 
+    fun onEvent(event: Event) {
+        val currentState = internalState.value!!
+        val newState = reduce(event, currentState)
+        internalState.postValue(newState)
+
+        if (event is Event.FamilyNameChange) {
+            saveFamilyName(newState.currentFamilyName)
+        }
+    }
+
+    private fun saveFamilyName(newFamilyName: String?) {
+        sharedPreference.saveNewFamilyName(newFamilyName!!)
+    }
+
     init {
+        getAndInitFamilyListAndCurrentMember()
+        getAndInitSavedFamilyName()
+    }
+
+    private fun getAndInitFamilyListAndCurrentMember() {
         viewModelScope.launch {
             try {
                 val currentMember = memberService.currentMember()
@@ -76,10 +95,9 @@ class ProfileViewModel(
         }
     }
 
-    fun onEvent(event: Event) {
-        val currentState = internalState.value!!
-        val newState = reduce(event, currentState)
-        internalState.postValue(newState)
+    private fun getAndInitSavedFamilyName() {
+        val savedFamily = sharedPreference.getSavedFamilyName()
+        onEvent(Event.FamilyNameChange(savedFamily!!))
     }
 
     fun logout() {

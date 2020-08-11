@@ -9,11 +9,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.hr.kurtovic.tomislav.familyboard.auth.AuthFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.MessageInputFragment
 import com.hr.kurtovic.tomislav.familyboard.main_board.message_display.MessageDisplayDialogFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private val sharedViewModel: SharedViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         val tag = fragment::class.java.simpleName
         val currentFragment = supportFragmentManager.findFragmentByTag(tag)
         if (currentFragment?.isVisible == true) {
-            return;
+            return
         }
         supportFragmentManager.commit {
             this.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)

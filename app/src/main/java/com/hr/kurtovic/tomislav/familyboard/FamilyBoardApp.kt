@@ -13,6 +13,8 @@ import com.hr.kurtovic.tomislav.familyboard.main_board.input.pets.PetsViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.input.store.StoreViewModel
 import com.hr.kurtovic.tomislav.familyboard.main_board.message_display.MessageDisplayViewModel
 import com.hr.kurtovic.tomislav.familyboard.profile.ProfileViewModel
+import com.hr.kurtovic.tomislav.familyboard.util.SharedPreference
+import com.hr.kurtovic.tomislav.familyboard.util.SharedPreferenceImpl
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -65,10 +67,10 @@ val familyList = module {
 }
 
 val profile = module {
-    viewModel { ProfileViewModel(get(), get(), get()) }
+    viewModel { ProfileViewModel(get(), get(), get(), get()) }
 }
 
 val appModels = module {
-    viewModel { SharedViewModel(androidApplication().applicationContext) }
     viewModel { FragmentHolderViewModel(androidApplication().applicationContext, get()) }
+    single<SharedPreference> { SharedPreferenceImpl(androidApplication().applicationContext) }
 }
