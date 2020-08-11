@@ -71,6 +71,6 @@ val profile = module {
 }
 
 val appModels = module {
-    viewModel { FragmentHolderViewModel(androidApplication().applicationContext, get()) }
+    viewModel { FragmentHolderViewModel(get(), get()) }
     single<SharedPreference> { SharedPreferenceImpl(androidApplication().applicationContext) }
 }

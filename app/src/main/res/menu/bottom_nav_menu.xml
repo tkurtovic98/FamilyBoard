@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/room_list_item"
+        android:id="@+id/bottom_nav_family_list_item"
         android:icon="@drawable/ic_search"
         android:title="@string/list_tab" />
 
     <item
-        android:id="@+id/main_chat_item"
+        android:id="@+id/bottom_nav_main_board_item"
         android:icon="@drawable/ic_dashboard_black"
         android:title="@string/chat_tab" />
     <item
-        android:id="@+id/profile_item"
+        android:id="@+id/bottom_nav_profile_item"
         android:icon="@drawable/ic_account_circle_black"
         android:title="@string/profile_tab" />
 </menu>

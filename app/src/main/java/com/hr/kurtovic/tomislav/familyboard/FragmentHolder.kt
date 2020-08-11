@@ -15,6 +15,12 @@ import com.hr.kurtovic.tomislav.familyboard.profile.ProfileFragment
 import kotlinx.android.synthetic.main.activity_board.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+/**
+ *  This class is a parent fragment for
+ *  MainBoardFragment,
+ *  ProfileFragment,
+ *  FamilyListFragment.
+ * */
 
 class FragmentHolder : Fragment() {
 
@@ -33,56 +39,61 @@ class FragmentHolder : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentHolderViewModel.state.observe(viewLifecycleOwner, Observer { init(it!!) })
+        fragmentHolderViewModel.state.observe(viewLifecycleOwner, Observer { render(it!!) })
         configureBottomNavigation()
     }
 
     private fun configureBottomNavigation() {
+        val bottomNavigationItemMap = configureBottomNavigationItemMap()
+
         bottom_navigation.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.room_list_item -> {
-                    showListRoom()
-                    true
+
+            if (bottomNavigationItemMap.containsKey(item.itemId)) {
+
+                bottomNavigationItemMap[item.itemId].apply {
+                    this?.invoke()
                 }
-                R.id.main_chat_item -> {
-                    showFamilyBoard()
-                    true
-                }
-                R.id.profile_item -> {
-                    showProfile()
-                    true
-                }
-                else -> false
+
+                return@setOnNavigationItemSelectedListener true
             }
+
+            false
         }
     }
 
-    private fun init(state: State) {
+    private fun configureBottomNavigationItemMap() =
+            mapOf(
+                R.id.bottom_nav_family_list_item to { showFamilyList() },
+                R.id.bottom_nav_main_board_item to { showMainBoard() },
+                R.id.bottom_nav_profile_item to { showProfile() }
+            )
 
-        if (state.loading) {
-            return
-        } else {
-            fragment_holder_progress.isVisible = false
-        }
+    private fun render(state: State) {
+        fragment_holder_progress.isVisible = state.loading
 
-        if (state.noSavedFamilies) {
-            bottom_navigation.selectedItemId = R.id.room_list_item
-            return
-        }
-
-        if (state.savedFamilyName!!.isEmpty()) {
-            bottom_navigation.selectedItemId = R.id.profile_item
-        } else {
-            bottom_navigation.selectedItemId = R.id.main_chat_item
+        if (!state.loading) {
+            bottom_navigation.selectedItemId = resolveSelectedItemId(state)
         }
     }
 
+    private fun resolveSelectedItemId(state: State): Int {
+        if (!state.hasSavedFamily) {
+            return R.id.bottom_nav_family_list_item
+        }
 
-    private fun showListRoom() {
+        if (state.savedFamilyName.isEmpty()) {
+            return R.id.bottom_nav_profile_item
+        }
+
+        return R.id.bottom_nav_main_board_item
+    }
+
+
+    private fun showFamilyList() {
         replaceFragment(FamilyListFragment.newInstance())
     }
 
-    private fun showFamilyBoard() {
+    private fun showMainBoard() {
         replaceFragment(MainBoardFragment.newInstance())
     }
 
